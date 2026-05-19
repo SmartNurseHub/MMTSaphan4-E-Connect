@@ -1,5 +1,5 @@
 /*****************************************************************
- * server.js — NurseStationHub (FIXED VERSION)
+ * server.js — NurseStationHub (PRODUCTION FIXED LINE WEBHOOK)
  *****************************************************************/
 
 require("module-alias/register");
@@ -9,14 +9,31 @@ require("./jobs/reminder.job");
 
 const express = require("express");
 const path = require("path");
+const line = require("@line/bot-sdk");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 /* =========================
-   MIDDLEWARE
+   LINE CONFIG
 ========================= */
-app.use(express.json({ limit: "5mb" }));
+const lineConfig = {
+  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
+  channelSecret: process.env.LINE_CHANNEL_SECRET,
+};
+
+const lineMiddleware = line.middleware(lineConfig);
+
+/* =========================
+   IMPORTANT: BODY PARSER FIX
+   (กัน LINE signature fail)
+========================= */
+app.use((req, res, next) => {
+  if (req.path === "/webhook") return next();
+
+  express.json({ limit: "5mb" })(req, res, next);
+});
+
 app.use(express.urlencoded({ extended: true, limit: "5mb" }));
 
 /* =========================
@@ -27,28 +44,23 @@ app.use("/modules", express.static(path.join(__dirname, "modules")));
 app.use("/views", express.static(path.join(__dirname, "views")));
 
 /* =========================
-   API (USE CENTRAL ONLY)
+   API
 ========================= */
 app.use("/api", require("./routes"));
 
 /* =========================
-   LEGACY COMPATIBILITY (TEMP FIX)
-   👉 redirect old frontend /api/patient → /api/patients
+   LEGACY COMPATIBILITY
 ========================= */
 app.use("/api/patient", (req, res, next) => {
-
   req.url = req.url.replace("/patient", "/patients");
   req.originalUrl = req.originalUrl.replace("/patient", "/patients");
-
   next();
-
 });
 
 /* =========================
    TEST ROUTE
 ========================= */
 app.get("/test-reminder", async (req, res) => {
-
   try {
     const { runReminderJob } = require("./modules/vaccination/server/vaccination.reminder.service");
     await runReminderJob();
@@ -57,39 +69,58 @@ app.get("/test-reminder", async (req, res) => {
     console.error(err);
     res.status(500).send("error");
   }
-
 });
 
-const line = require("@line/bot-sdk");
+/* =========================
+   LINE CLIENT
+========================= */
+const client = new line.Client(lineConfig);
 
-const lineConfig = {
-  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
-  channelSecret: process.env.LINE_CHANNEL_SECRET,
-};
-
-// middleware verify LINE signature (optional but recommended)
-const lineMiddleware = line.middleware(lineConfig);
-
+/* =========================
+   LINE WEBHOOK (FIXED)
+========================= */
 app.post("/webhook", lineMiddleware, async (req, res) => {
   try {
     console.log("🔥 LINE WEBHOOK HIT");
 
     const events = req.body.events;
 
-    // ถ้ายังไม่ทำ logic ก็แค่ตอบ 200 ไปก่อน
-    if (!events) return res.sendStatus(200);
+    if (!events || events.length === 0) {
+      return res.sendStatus(200);
+    }
 
-    // ตัวอย่าง loop events
     for (const event of events) {
-      console.log("Event:", event.type);
+      console.log("📩 Event:", event.type);
+
+      if (event.type === "message" && event.message.type === "text") {
+        await handleText(event);
+      }
     }
 
     return res.sendStatus(200);
   } catch (err) {
-    console.error("Webhook error:", err);
-    return res.sendStatus(500);
+    console.error("❌ Webhook error:", err);
+
+    // สำคัญ: LINE ต้องได้ 200 เสมอ
+    return res.sendStatus(200);
   }
 });
+
+/* =========================
+   MESSAGE HANDLER
+========================= */
+async function handleText(event) {
+  try {
+    const text = event.message.text;
+
+    await client.replyMessage(event.replyToken, {
+      type: "text",
+      text: `📌 คุณพิมพ์ว่า: ${text}`,
+    });
+  } catch (err) {
+    console.error("❌ Reply error:", err);
+  }
+}
 
 /* =========================
    SPA FALLBACK

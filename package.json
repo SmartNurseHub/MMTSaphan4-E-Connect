@@ -13,7 +13,7 @@
     "dev": "nodemon -r module-alias/register server.js"
   },
   "dependencies": {
-    "@line/bot-sdk": "^10.6.0",
+    "@line/bot-sdk": "^10.8.0",
     "adm-zip": "^0.5.17",
     "axios": "^1.13.6",
     "body-parser": "^2.2.2",
