@@ -1,0 +1,93 @@
+<!-- modules/nursingRecords/nursingRecords.view.html -->
+
+<div class="d-flex justify-content-center mb-3">
+  <div class="btn-group">
+
+    <div class="dropdown me-2">
+      <button class="btn dropdown-toggle"style="background-color:#006666;color:#fff;font-size:12px;" data-bs-toggle="dropdown">
+        👩‍⚕️ บันทึกการพยาบาลออนไลน์ 💻
+      </button>
+      <ul class="dropdown-menu"><li><a href="#" class="dropdown-item open-tab"data-tab="online" style="font-size:12px;" >➕ เพิ่มใหม่</a></li></ul>
+    </div>
+
+    <div class="dropdown">
+      <button class="btn dropdown-toggle" style="background-color:#006666;color:#fff;font-size:12px;"data-bs-toggle="dropdown">
+        👩‍⚕️ บันทึกการให้คำปรึกษา 💬
+      </button>
+
+
+      <ul class="dropdown-menu">
+
+  <li>
+    <a href="#" class="dropdown-item open-tab"
+       data-tab="counselor"
+       data-type="general"
+       style="font-size:12px;">
+      💬 คำปรึกษาทั่วไป
+    </a>
+  </li>
+
+  <li>
+    <a href="#" class="dropdown-item open-tab"
+       data-tab="counselor"
+       data-type="specific"
+       style="font-size:12px;">
+      🩺 คำปรึกษาเฉพาะด้าน
+    </a>
+  </li>
+
+  <li>
+    <a href="#" class="dropdown-item open-tab ps-4"
+       data-tab="counselor"
+       data-type="hbv-hcv"
+       style="font-size:12px;">
+      🦠 คัดกรองไวรัสตับอักเสบบี และซี
+    </a>
+  </li>
+
+  <li>
+    <a href="#" class="dropdown-item open-tab ps-4"
+       data-tab="counselor"
+       data-type="anemia"
+       style="font-size:12px;">
+      🩸 คัดกรองภาวะโลหิตจาง
+    </a>
+  </li>
+
+</ul>
+      
+
+
+
+
+
+    </div>
+
+  </div>
+</div>
+
+<!-- 🔥 ตารางอยู่หน้าแรก -->
+<div id="listTableContainer">
+  <h6 class="text-center mb-3">รายการบันทึกทางการพยาบาล</h6>
+  <div class="table-responsive">
+    <table id="nursingTable" class="table table-bordered table-striped" style="font-size:10px;">
+      <thead class="table-primary text-center">
+        <tr>
+          <th width="15%">NSR No.</th>
+          <th width="12%">วันที่ให้บริการ</th>
+          <th width="8%">HN</th>
+          <th width="15%">ชื่อ - สกุล</th>
+          <th width="18%">กิจกรรม</th>
+          <th width="13%">ผู้บันทึก</th>
+          <th width="18%">การจัดการ</th>
+        </tr>
+      </thead>
+      <tbody id="nursingTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 🔥 พื้นที่โหลด subview -->
+<div id="nursingRecordsContainer" class="mt-3"></div>
+<script src="/modules/nursingRecords/print.sticker.js"></script>
+

@@ -1,0 +1,223 @@
+<!-- ================= SEARCH ================= -->
+<div class="col-10 mx-auto mb-3 mt-4">
+  <div class="col-6 mx-auto mb-3 mt-4 position-relative">
+    <div class="input-group">
+      <span class="input-group-text" style="font-size:10px;">🔍</span>
+      <input type="text" id="patientSearch" class="form-control" autocomplete="off" style="font-size:12px;" >
+      <button type="button" class="btn btn-primary" id="btnSearchPatient" style="font-size:12px;">
+        ค้นหา
+      </button>
+    </div>
+
+    <div id="searchResults"
+         class="list-group w-100"
+         style="position:absolute; top:100%; z-index:1000; display:none;">
+    </div>
+  </div>
+</div>
+
+<!-- ================= FORM ================= -->
+<form id="nursingForm" class="row g-3">
+            <!-- Basic Info -->
+            <div class="col-md-2" >
+              <label style="font-size:10px;" class="form-label mb-0">NSR No.</label>
+              <input style="font-size:10px;" type="text" class="form-control" id="NSR" name="NSR" readonly>
+            </div>
+            <div class="col-md-2" hidden>
+              <label class="form-label mb-0">วันที่บันทึกข้อมูล</label>
+              <input type="text" class="form-control" id="Stamp" name="Stamp">
+            </div>
+            <div class="col-md-2">
+              <label style="font-size:10px;" class="form-label mb-0">HN</label>
+              <input style="font-size:10px;" type="text" class="form-control" id="HN" name="HN">
+            </div>
+            <div class="col-md-2">
+              <label style="font-size:10px;"class="form-label mb-0">เลขบัตรประชาชน</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="CID" name="CID">
+            </div>
+            <div class="col-md-2" hidden>
+              <label style="font-size:10px;"class="form-label mb-0">คำนำหน้า</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="PRENAME" name="PRENAME">
+            </div>
+            <div class="col-md-2">
+              <label style="font-size:10px;"class="form-label mb-0">ชื่อผู้รับบริการ</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="NAME" name="NAME">
+            </div>
+            <div class="col-md-2">
+              <label style="font-size:10px;"class="form-label mb-0">นามสกุล</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="LNAME" name="LNAME">
+            </div>
+            <div class="col-md-2" hidden>
+              <label style="font-size:10px;"class="form-label mb-0">วันเกิด</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="BIRTH" name="BIRTH">
+            </div>
+            <div class="col-md-2">
+              <label style="font-size:10px;"class="form-label mb-0">เบอร์โทรศัพท์</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="TELEPHONE" name="TELEPHONE">
+            </div>
+            <div class="col-md-2">
+              <label style="font-size:10px;"class="form-label mb-0">วันที่ให้บริการ</label>
+              <input style="font-size:10px;"type="date" class="form-control" id="DateService" name="DateService">
+            </div>
+            <div class="col-md-5">
+              <label style="font-size:10px;"class="form-label mb-0">กิจกรรมทางการพยาบาล</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="Activity" name="Activity">
+            </div>
+            <div class="col-md-5">
+              <label style="font-size:10px;"class="form-label mb-0">วัตถุประสงค์</label>
+              <input style="font-size:10px;"type="text" class="form-control" id="Objective" name="Objective">
+            </div>
+            <div class="col-6">
+              <label style="font-size:10px;" class="form-label mb-0">ข้อมูลสุขภาพ</label>
+              <textarea style="font-size:10px;"class="form-control"id="HealthInform"name="HealthInform"rows="2"data-type="inform"></textarea>
+            </div>
+            <div class="col-6">
+              <label style="font-size:10px;" class="form-label mb-0">การให้คำแนะนำ</label>
+              <textarea style="font-size:10px;"class="form-control"id="HealthAdvice"name="HealthAdvice"rows="2"data-type="advice"></textarea>
+            </div>
+            <div class="col-12">
+              <label style="font-size:10px;" class="form-label mb-0">ไฟล์แนบ (Google Drive URL)</label>
+              <input
+                style="font-size:10px;"
+                type="text"
+                class="form-control"
+                id="fileURL"
+                name="fileURL"
+                placeholder="https://drive.google.com/file/d/xxxxx/view"
+              >
+            </div>
+
+            <!-- Follow-ups Tabs -->
+            <ul class="nav nav-tabs mb-2" id="followUpTabs" role="tablist">
+              <li class="nav-item">
+                <button style="font-size:10px;"class="nav-link active" id="follow1-tab" data-bs-toggle="tab" data-bs-target="#follow1" type="button" role="tab">ติดตามครั้งที่ 1</button>
+              </li>
+              <li class="nav-item">
+                <button style="font-size:10px;"class="nav-link" id="follow2-tab" data-bs-toggle="tab" data-bs-target="#follow2" type="button" role="tab">ติดตามครั้งที่ 2</button>
+              </li>
+              <li class="nav-item">
+                <button style="font-size:10px;"class="nav-link" id="follow3-tab" data-bs-toggle="tab" data-bs-target="#follow3" type="button" role="tab">ติดตามครั้งที่ 3</button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="followUpTabsContent">
+              <!-- Follow-up 1 -->
+              <div class="tab-pane fade show active" id="follow1" role="tabpanel">
+                <div class="row g-2">
+                  <div class="col-3">
+                    <label style="font-size:10px;">วันที่ติดตาม:</label>
+                    <input style="font-size:10px;"type="date" class="form-control form-control-sm" id="DateFollow1" name="DateFollow1">
+                  </div>
+                  <div class="col-2">
+                    <label style="font-size:10px;">เวลา:</label>
+                    <input style="font-size:10px;"type="time" class="form-control form-control-sm" id="TimeFollow1" name="TimeFollow1">
+                  </div>
+                  <div class="col-3">
+                    <label style="font-size:10px;">ช่องทาง:</label>
+                    <select style="font-size:10px;" class="form-select form-select-sm" id="RouteFollow1" name="RouteFollow1">
+                      <option value="">-- เลือกช่องทาง --</option>
+                      <option value="Line OA">Line OA</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="โทรศัพท์">โทรศัพท์</option>
+                      <option value="หน้าเว็บไซต์">หน้าเว็บไซต์</option>
+                      <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                  </div>
+                  <div class="col-4">
+                    <label style="font-size:10px;">ผู้ให้บริการ:</label>
+                    <textarea style="font-size:10px;" class="form-control form-control-sm"id="Provider1" name="Provider1" rows="1" data-type="provider"></textarea>
+                  </div>
+                  <div class="col-12">
+                    <label style="font-size:10px;">ผลการประเมิน:</label>
+                    <textarea style="font-size:10px;" class="form-control form-control-sm"id="Response1" name="Response1" rows="1" data-type="response"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Follow-up 2 -->
+              <div class="tab-pane fade" id="follow2" role="tabpanel">
+                <div class="row g-2">
+                  <div class="col-3">
+                    <label style="font-size:10px;">วันที่ติดตาม:</label>
+                    <input style="font-size:10px;"type="date" class="form-control form-control-sm" id="DateFollow2" name="DateFollow2">
+                  </div>
+                  <div class="col-2">
+                    <label style="font-size:10px;">เวลา:</label>
+                    <input style="font-size:10px;" type="time" class="form-control form-control-sm" id="TimeFollow2" name="TimeFollow2">
+                  </div>
+                  <div class="col-3">
+                    <label style="font-size:10px;">ช่องทาง:</label>
+                    <select style="font-size:10px;" class="form-select form-select-sm" id="RouteFollow2" name="RouteFollow2">
+                      <option value="">-- เลือกช่องทาง --</option>
+                      <option value="Line OA">Line OA</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="โทรศัพท์">โทรศัพท์</option>
+                      <option value="หน้าเว็บไซต์">หน้าเว็บไซต์</option>
+                      <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                  </div>
+                  <div class="col-4">
+                    <label style="font-size:10px;">ผู้ให้บริการ:</label>
+                    <textarea style="font-size:10px;" class="form-control form-control-sm"id="Provider2" name="Provider2" rows="1" data-type="provider"></textarea>
+                  </div>
+                  <div class="col-12">
+                    <label style="font-size:10px;">ผลการประเมิน:</label>
+                    <textarea style="font-size:10px;" class="form-control form-control-sm"id="Response2" name="Response2" rows="1" data-type="response"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Follow-up 3 -->
+              <div class="tab-pane fade" id="follow3" role="tabpanel">
+                <div class="row g-2">
+                  <div class="col-3">
+                    <label style="font-size:10px;">วันที่ติดตาม:</label>
+                    <input style="font-size:10px;"type="date" class="form-control form-control-sm" id="DateFollow3" name="DateFollow3">
+                  </div>
+                  <div class="col-2">
+                    <label style="font-size:10px;">เวลา:</label>
+                    <input style="font-size:10px;"type="time" class="form-control form-control-sm" id="TimeFollow3" name="TimeFollow3">
+                  </div>
+                  <div class="col-3">
+                    <label style="font-size:10px;">ช่องทาง:</label>
+                    <select style="font-size:10px;"class="form-select form-select-sm" id="RouteFollow3" name="RouteFollow3">
+                      <option value="">-- เลือกช่องทาง --</option>
+                      <option value="Line OA">Line OA</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="โทรศัพท์">โทรศัพท์</option>
+                      <option value="หน้าเว็บไซต์">หน้าเว็บไซต์</option>
+                      <option value="อื่นๆ">อื่นๆ</option>
+                    </select>
+                  </div>
+                  <div class="col-4">
+                    <label style="font-size:10px;">ผู้ให้บริการ:</label>
+                    <textarea style="font-size:10px;"
+                    class="form-control form-control-sm"
+                    id="Provider3"
+                    name="Provider3"
+                    rows="1"
+                    data-type="provider"></textarea>
+                  </div>
+                  <div class="col-12">
+                    <label style="font-size:10px;">ผลการประเมิน:</label>
+                    <textarea style="font-size:10px;" class="form-control form-control-sm"id="Response3" name="Response3" rows="1" data-type="response"></textarea>
+                  </div>
+                </div>
+              </div>
+
+            </div> <!-- tab-content -->
+
+            <div class="col-12 mt-2">
+              <button style="font-size:10px;" type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+<!-- ================= TABLE (BOTTOM WHEN FORM OPENED) ================= -->
+<div id="tableBottomContainer" class="mt-4"></div>
+
+
+<!-- ================= TEXTAREA SUGGEST ================= -->
+<div id="textarea-suggest"
+     class="list-group position-absolute"
+     style="z-index:2000; display:none; font-size:10px;">
+</div>

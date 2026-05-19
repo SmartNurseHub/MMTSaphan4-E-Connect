@@ -1,0 +1,287 @@
+/*****************************************************************
+ * styles.css (RE-ORGANIZED VERSION)
+ *
+ * แนวคิด:
+ * - ใช้สำหรับ layout หลักของระบบ (Header / Sidebar / Content)
+ * - รองรับ responsive (desktop + mobile)
+ * - ใช้ CSS variables เพื่อควบคุม theme
+ *****************************************************************/
+
+
+/*****************************************************************
+ * MODULE: ROOT VARIABLES
+ * หน้าที่:
+ * - กำหนดค่ากลาง (theme / layout)
+ * - ใช้ซ้ำทั้งระบบ
+ *****************************************************************/
+
+:root {
+  --sidebar-width: 220px;
+  --header-height: 60px;
+  --card-radius: 10px;
+  --transition-speed: 0.25s;
+
+  --primary-color: #006666;
+  --bg-color: #f4f6f9;
+}
+
+
+/*****************************************************************
+ * MODULE: GLOBAL BASE STYLE
+ * หน้าที่:
+ * - กำหนด font และ style พื้นฐาน
+ *****************************************************************/
+
+body, input, textarea, button {
+  font-family: 'Prompt', sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-color);
+  font-size: 14px;
+}
+
+
+/*****************************************************************
+ * MODULE: HEADER (TOP NAVBAR)
+ * หน้าที่:
+ * - แสดงโลโก้ + เมนู + user profile
+ * - fixed อยู่ด้านบน
+ *****************************************************************/
+
+header.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  z-index: 1000;
+  background: #fba003fd;
+  color: #fff;
+  gap: 12px;
+}
+
+header.app-header img.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.menu-btn {
+  font-size: 24px;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+/*****************************************************************
+ * MODULE: USER BOX (HEADER RIGHT)
+ * หน้าที่:
+ * - แสดง avatar และข้อมูล user
+ *****************************************************************/
+
+.user-box {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-box .user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e0e0e0;
+}
+
+
+/*****************************************************************
+ * MODULE: SIDEBAR (LEFT MENU)
+ * หน้าที่:
+ * - เมนูหลักของระบบ
+ * - สามารถ collapse ได้
+ *****************************************************************/
+
+#sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - var(--header-height));
+  background: var(--primary-color);
+  color: #fff;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: width var(--transition-speed);
+}
+
+#sidebar h6 {
+  padding: 0 18px;
+}
+
+#sidebar a {
+  display: block;
+  padding: 10px 18px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+#sidebar a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+
+/*****************************************************************
+ * MODULE: MAIN CONTENT AREA
+ * หน้าที่:
+ * - พื้นที่แสดงผลหลักของแต่ละหน้า
+ * - ปรับตาม sidebar (collapsed / expanded)
+ *****************************************************************/
+
+#content {
+  margin-top: var(--header-height);
+  margin-left: var(--sidebar-width);
+  min-height: calc(100vh - var(--header-height));
+  padding: 20px;
+  box-sizing: border-box;
+  transition: margin-left var(--transition-speed);
+}
+
+body.sidebar-collapsed #content {
+  margin-left: 0;
+}
+
+body.sidebar-collapsed #sidebar {
+  width: 0;
+}
+
+
+/*****************************************************************
+ * MODULE: RESPONSIVE (MOBILE ≤768px)
+ * หน้าที่:
+ * - ปรับ layout สำหรับมือถือ
+ * - sidebar ซ่อน/แสดงตาม state
+ *****************************************************************/
+
+@media (max-width: 768px) {
+
+  /* content เต็มจอเสมอ */
+  #content {
+    left: 0;
+  }
+
+  /* sidebar แสดงเฉพาะตอนยังไม่ collapsed */
+  body:not(.sidebar-collapsed) #sidebar {
+    width: var(--sidebar-width);
+  }
+
+  body.sidebar-collapsed #sidebar {
+    width: 0;
+  }
+}
+
+
+/*****************************************************************
+ * MODULE: CARD COMPONENT
+ * หน้าที่:
+ * - ใช้สำหรับ UI card ทั่วไป
+ *****************************************************************/
+
+.card-compact {
+  border-radius: var(--card-radius);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+
+/*****************************************************************
+ * MODULE: TABLE STYLE
+ * หน้าที่:
+ * - style ตารางข้อมูล (ทั่วไป + DataTable)
+ *****************************************************************/
+
+table.dataTable {
+  font-family: 'Prompt', sans-serif;
+  font-size: 0.75rem;
+}
+
+.my-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fff;
+}
+
+.my-table th {
+  background: #f3f4f6;
+  text-align: left;
+  padding: 10px;
+  font-weight: 600;
+  border-bottom: 1px solid #ddd;
+}
+
+.my-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.my-table tr:hover {
+  background: #f9fafb;
+}
+
+
+/*****************************************************************
+ * MODULE: TAB COMPONENT (COUNSELOR SECTION)
+ * หน้าที่:
+ * - ปรับ style tab เฉพาะ section นี้
+ *****************************************************************/
+
+/* tab ปกติ */
+#counselorSectionTab .nav-link {
+  font-size: 10px;
+  font-weight: bold;
+  color: #006666;
+  border: 1px solid transparent;
+}
+
+/* tab ที่ active */
+#counselorSectionTab .nav-link.active {
+  color: #fff;
+  background-color: #006666;
+  border-color: #006666;
+}
+
+/* hover (ไม่ active) */
+#counselorSectionTab .nav-link:hover {
+  color: #004c4c;
+}
+
+.stock-header {
+  background-color: #006666;
+  color: #fff;
+  z-index: 10;
+}
+
+.stock-header th {
+  background-color: #006666;
+  color: #fff;
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ทำให้ sticky ทำงานชัวร์ */
+.table-responsive {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+/*****************************************************************
+ * MODULE: END
+ *****************************************************************/

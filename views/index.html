@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <base href="/" />
+
+  <title>Nurse Station Hub 2026</title>
+
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- LOCAL CSS -->
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+
+<header class="app-header d-flex align-items-center px-3">
+  <span class="menu-btn me-3" onclick="toggleSidebar()">☰</span>
+
+  <img src="/assets/images/LOGO.png" alt="Logo" class="logo">
+
+  <div class="ms-2 me-3 text-start">
+    <h6 class="text-muted mb-1"
+        style="font-size: 25px; letter-spacing: 2px;">
+      ระบบงานพยาบาล
+    </h6>
+    <h6 style="font-size: 18px; font-weight: 500; letter-spacing: 4px;">
+      Nurse Station Hub 2026
+    </h6>
+  </div>
+  <div class="user-box ms-auto d-flex align-items-center">
+    <img
+      src="https://i.pravatar.cc/50?img=32"
+      alt="User Avatar"
+      class="user-avatar">
+
+    <div class="ms-2 text-end me-3">
+      <div id="userName" class="fw-bold">
+        ธนชนัญ เกณฑ์คง
+      </div>
+      <small id="userRole" class="text-muted">
+        ผู้ดูแลระบบ
+      </small>
+    </div>
+
+    <button
+      class="btn btn-sm btn-outline-danger"
+      id="btnLogout">
+      LOGOUT
+    </button>
+  </div>
+
+</header>
+
+<nav id="sidebar">
+  <div class="p-3" style="font-size: 14px;">
+    <a href="#" data-nav="dashboard">🏠 Dashboard</a>
+    <a href="#" data-nav="patients">🧑‍⚕️ Patients</a>
+    <a href="#" data-nav="nursingRecords">📝 Nursing Records</a>
+    <a href="#" data-nav="vaccination">💉 Vaccination</a>
+    <a href="#" data-nav="appointments">📅 Appointments</a>
+    <a href="#" id="reportsBtn">📊 Reports</a>
+    <div id="reportsSub" style="display:none; padding-left:15px;">
+      <a href="#" onclick="goInventory()">📦 Inventory</a>
+    </div>
+
+</div>
+  </div>
+</nav>
+
+<main id="content">
+  <div id="view-container">Loading...</div>
+</main>
+
+<!-- Vendor JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!-- GLOBAL UTILS -->
+<script src="/assets/js/date.utils.js"></script>
+
+<!-- CORE -->
+<script src="/core/app.js" defer></script>
+
+<!-- VACCINATION -->
+<script src="/modules/vaccination/client/vaccination.state.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.utils.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.tabs.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.patient.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.master.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.inventory.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.his.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.view.js"></script>
+
+<script src="/modules/vaccination/client/vaccine.upload.js"></script>
+
+<script src="/modules/vaccination/client/vaccination.main.js"></script>
+
+</body>
+</html>

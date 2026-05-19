@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>LIFF QR Scanner</title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+<h3>📷 Scan QR (LINE)</h3>
+<div id="qr-reader" style="width:300px;"></div>
+
+<script>
+const LIFF_ID = "2009957069-S3gwfFka";
+const GAS_URL = "https://script.google.com/macros/s/AKfycby_wMjqQS0qm454wW3XRZ-j2T4EI8vNgXyBDi9IihhaDKSpbv4k0OUlX6b_yN7naNocvQ/exec";
+
+let userId = "unknown";
+let scannedSet = new Set();
+let isProcessing = false;
+
+async function initLIFF() {
+  await liff.init({ liffId: LIFF_ID });
+
+  if (!liff.isLoggedIn()) {
+    liff.login();
+    return;
+  }
+
+  const profile = await liff.getProfile();
+  userId = profile.userId;
+
+  startScan();
+}
+
+function startScan() {
+  const qr = new Html5Qrcode("qr-reader");
+
+  Html5Qrcode.getCameras().then(devices => {
+    if (!devices.length) {
+      alert("ไม่พบกล้อง");
+      return;
+    }
+
+    const cameraId = devices[0].id;
+
+    qr.start(
+      cameraId,
+      { fps: 10, qrbox: 250 },
+
+      async (decodedText) => {
+
+        if (isProcessing) return;
+        if (scannedSet.has(decodedText)) return;
+
+        isProcessing = true;
+        scannedSet.add(decodedText);
+
+        const data = {
+          code: decodedText,
+          time: new Date().toISOString(),
+          userId: userId
+        };
+
+        try {
+          await fetch(GAS_URL, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: { "Content-Type": "application/json" }
+          });
+
+          alert("✅ บันทึก: " + decodedText);
+
+        } catch (err) {
+          alert("❌ บันทึกไม่สำเร็จ");
+        }
+
+        setTimeout(() => isProcessing = false, 1500);
+      }
+    );
+  });
+}
+
+initLIFF();
+</script>
+
+</body>
+</html>
