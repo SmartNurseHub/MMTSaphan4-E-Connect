@@ -137,8 +137,7 @@
   <li>
   <a href="javascript:void(0)"
      class="dropdown-item open-tab"
-     data-tab="stockCard"
-     style="font-size:12px;">
+     data-tab="stockCard">
     📄 Stock Card
   </a>
 </li>
@@ -252,215 +251,190 @@
   <!-- TAB : ADD VACCINE -->
   <!-- ===================================== -->
 
-<div id="addVaccineTab" class="vaccine-tab">
-<div class="row">
-<!-- ================= LEFT ================= -->
-<div class="col-lg-6">
+  <div id="addVaccineTab"
+       class="vaccine-tab">
 
-<!-- PATIENT CARD -->
-<div class="card shadow-sm mb-3">
+    <div class="row">
 
-<div class="card-header text-white" style="background-color:#006666; font-size:13px;">
-🧑 ข้อมูลผู้รับบริการ
-</div>
+      <!-- LEFT -->
+      <div class="col-lg-6">
 
-<div class="card-body p-2" style="font-size:10px;">
+        <!-- PATIENT -->
+        <div class="card shadow-sm mb-3">
 
-<div id="patientCard">
+          <div class="card-header text-white"
+               style="background-color:#006666;font-size:13px;">
+            🧑 ข้อมูลผู้รับบริการ
+          </div>
 
-<div><b>เลขบัตรประชาชน :</b> <span id="p_cid">-</span></div>
-<div><b>ชื่อ - สกุล :</b> <span id="p_name">-</span></div>
-<div><b>วันเกิด :</b> <span id="p_birth">-</span> &nbsp;&nbsp;|&nbsp;&nbsp; <b>อายุ :</b> <span id="p_age">-</span></div>
+          <div class="card-body p-2"
+               style="font-size:10px;">
 
-</div>
+            <div><b>เลขบัตรประชาชน :</b> <span id="p_cid">-</span></div>
+            <div><b>ชื่อ - สกุล :</b> <span id="p_name">-</span></div>
+            <div>
+              <b>วันเกิด :</b> <span id="p_birth">-</span>
+              |
+              <b>อายุ :</b> <span id="p_age">-</span>
+            </div>
 
-</div>
-</div>
+          </div>
 
+        </div>
 
-<!-- VACCINATION FORM -->
-<div class="card shadow-sm">
+        <!-- FORM -->
+        <div class="card shadow-sm">
 
-<div class="card-header text-white" style="background-color:#006666; font-size:13px;">
-📑 บันทึกการให้วัคซีน
-</div>
+          <div class="card-header text-white"
+               style="background-color:#006666;font-size:13px;">
+            📑 บันทึกการให้วัคซีน
+          </div>
 
-<div class="card-body">
+          <div class="card-body">
 
-<form id="vaccinationForm">
+            <form id="vaccinationForm">
 
-<input type="hidden" id="cid">
-<input type="hidden" id="apid">
-<input type="hidden" id="inventoryId">
+              <input type="hidden" id="cid">
+              <input type="hidden" id="apid">
 
-<div class="row mb-2">
+              <div class="row mb-2">
 
-<div class="col-md-6">
-<label class="form-label fw-bold" style="font-size:10px;">VCN No.</label>
-<input type="text" id="cn" class="form-control" style="font-size:10px;" readonly>
-</div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold"
+                         style="font-size:10px;">
+                    VCN No.
+                  </label>
 
-<div class="col-md-6">
-<label class="form-label fw-bold" style="font-size:10px;">วันที่ฉีด</label>
-<input type="date" id="recordDate" class="form-control" style="font-size:10px;">
-</div>
+                  <input type="text"
+                         id="cn"
+                         class="form-control"
+                         readonly>
+                </div>
 
-</div>
+                <div class="col-md-6">
+                  <label class="form-label fw-bold"
+                         style="font-size:10px;">
+                    วันที่ฉีด
+                  </label>
 
-<div class="row mb-2">
+                  <input type="date"
+                         id="recordDate"
+                         class="form-control">
+                </div>
 
-<div class="col-md-9">
-<label class="form-label fw-bold" style="font-size:10px;">วัคซีน</label>
-<select id="vaccineType" class="form-select" style="font-size:10px;">
-<option value="">-- เลือกวัคซีน --</option>
-</select>
-</div>
+              </div>
 
-<div class="col-md-3">
-<label class="form-label fw-bold" style="font-size:10px;">เข็มที่</label>
-<select id="doseNumber" class="form-select" style="font-size:10px;">
-<option value="">เลือกเข็ม</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-</select>
-</div>
+              <div class="mb-2">
 
-</div>
+                <label class="form-label fw-bold"
+                       style="font-size:10px;">
+                  วัคซีน
+                </label>
 
+                <select id="vaccineType"
+                        class="form-select">
+                  <option value="">-- เลือกวัคซีน --</option>
+                </select>
 
-<div class="row mb-2">
+              </div>
 
-<div class="col-md-6">
-<label class="form-label fw-bold" style="font-size:10px;">ผู้ให้บริการ</label>
-<input type="text" id="providerName" class="form-control" style="font-size:10px;">
-</div>
+              <div class="row mb-2">
 
-<div class="col-md-6">
-<label class="form-label fw-bold" style="font-size:10px;">ตำแหน่งผู้ให้บริการ</label>
-<input type="text" id="providerRole" class="form-control" style="font-size:10px;">
-</div>
+                <div class="col-md-6">
 
-</div>
+                  <label class="form-label fw-bold"
+                         style="font-size:10px;">
+                    เข็มที่
+                  </label>
 
-<div class="row mb-2">
+                  <select id="doseNumber"
+                          class="form-select">
 
-<div class="col-md-6">
-<label class="form-label fw-bold" style="font-size:10px;">สถานที่</label>
-<input type="text" id="locationType" class="form-control" style="font-size:10px;">
-</div>
+                    <option value="">เลือกเข็ม</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
 
-<div class="col-md-6">
-<label class="form-label fw-bold" style="font-size:10px;">รายละเอียดสถานที่</label>
-<input type="text" id="locationDetail" class="form-control" style="font-size:10px;">
-</div>
+                  </select>
 
-</div>
+                </div>
 
+                <div class="col-md-6">
 
-<div class="alert alert-info small" style="font-size:10px;">
-📅 ระบบสามารถคำนวณเข็มถัดไปอัตโนมัติ
-</div>
+                  <label class="form-label fw-bold"
+                         style="font-size:10px;">
+                    Lot Number
+                  </label>
 
-<button type="submit"
-class="btn w-100"
-style="font-size:10px;font-weight:bold;background:#fba003fd;">
-💾 บันทึกวัคซีน
-</button>
+                  <input type="text"
+                         id="lotNumber"
+                         class="form-control">
 
-</form>
+                </div>
 
-</div>
-</div>
+              </div>
 
-</div>
+              <button type="submit"
+                      class="btn w-100"
+                      style="font-size:10px;
+                             font-weight:bold;
+                             background:#fba003fd;">
 
+                💾 บันทึกวัคซีน
 
-<!-- ================= RIGHT ================= -->
+              </button>
 
-<div class="col-lg-6">
-<!-- VACCINE SCHEDULE -->
-<div class="card shadow-sm mb-3">
-<div class="card-header bg-light" style="font-size:10px;">
-📅 ตารางนัดวัคซีน
-</div>
-<div class="card-body p-2">
-<table class="table table-sm table-bordered" style="font-size:10px;">
-<thead class="table-light">
-<tr>
-<th>ชื่อวัคซีน</th>
-<th>เข็ม</th>
-<th>วันที่นัด</th>
-<th>สถานะ</th>
-<th>การจัดการ</th>
-</tr>
-</thead>
+            </form>
 
-<tbody id="appointmentTable"></tbody>
+          </div>
 
-</table>
+        </div>
 
-</div>
-</div>
+      </div>
 
+      <!-- RIGHT -->
+      <div class="col-lg-6">
 
-<!-- VACCINATION HISTORY -->
+        <!-- APPOINTMENT -->
+        <div class="card shadow-sm mb-3">
 
-<div class="card shadow-sm mb-3">
+          <div class="card-header bg-light"
+               style="font-size:10px;">
+            📅 ตารางนัดวัคซีน
+          </div>
 
-<div class="card-header bg-light" style="font-size:13px;">
-📜 ประวัติการฉีดวัคซีน
-</div>
+          <div class="card-body p-2">
 
-<div class="card-body p-2">
+            <table class="table table-sm table-bordered"
+                   style="font-size:10px;">
 
-<table class="table table-sm table-striped" style="font-size:10px;">
+              <thead class="table-light">
 
-<thead>
-<tr>
-<th>วันที่</th>
-<th>วัคซีน</th>
-<th>เข็ม</th>
-<th>Lot</th>
-</tr>
-</thead>
+                <tr>
+                  <th>ชื่อวัคซีน</th>
+                  <th>เข็ม</th>
+                  <th>วันที่นัด</th>
+                  <th>สถานะ</th>
+                  <th>การจัดการ</th>
+                </tr>
 
-<!-- ADD TAB -->
-<tbody id="historyTable"></tbody>
+              </thead>
 
+              <tbody id="appointmentTable"></tbody>
 
-</table>
+            </table>
 
-</div>
-</div>
+          </div>
 
+        </div>
 
-<!-- NEXT DOSE PREVIEW -->
+      </div>
 
-<div class="card shadow-sm">
+    </div>
 
-<div class="card-header bg-light" style="font-size:13px;">
-🔮 เข็มถัดไป
-</div>
-
-<div class="card-body" style="font-size:12px;">
-
-<div id="nextDosePreview">
-
-ยังไม่มีข้อมูล
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-</div>
+  </div>
 
   <!-- ===================================== -->
   <!-- TIMELINE TAB -->

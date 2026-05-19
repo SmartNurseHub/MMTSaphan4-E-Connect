@@ -424,7 +424,7 @@ function bindModeSwitch() {
 // LOAD PATIENT DROPDOWN
 // =========================================================
 async function loadPatientsSelect() {
-  const res = await fetch("/api/patients/list");   // ✅ ถูกต้อง
+  const res = await fetch("/api/patient/list");   // ✅ ถูกต้อง
   const json = await res.json();
   if (!json.success) return;
 

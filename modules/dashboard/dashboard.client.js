@@ -161,7 +161,7 @@ async function loadFollowers() {
  *****************************************************************/
 async function loadPatients() {
   try {
-    const res = await fetch("/api/patients/list");
+    const res = await fetch("/api/patient/list");
     const result = await res.json();
 
     const select = document.getElementById("patientSelect");

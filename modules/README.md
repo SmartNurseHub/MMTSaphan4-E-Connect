@@ -16,12 +16,12 @@ https://nursestationhub2026.onrender.com/api/lineOA/webhook
 https://haziness-shush-utilize.ngrok-free.dev/lineOA/webhook
 
 
-cd /d "F:\Mithmitree_SP4\ระบบงานพยาบาล\NursingCareManagementSystem"
+cd F:\Mithmitree_SP4\ระบบงานพยาบาล\NursingCareManagementSystem
 
 
 node test.js
 node server.js
-netstat -ano | findstr :4000
+netstat -ano | findstr :7000
 taskkill /PID <PID> /F
 
 git status
@@ -30,10 +30,6 @@ git commit -m "modified1"
 git pull origin main  # ดึงก่อน เผื่อมีคนแก้ก่อน
 git push origin main
 
-
-git add .
-git commit -m "fix line webhook production ready"
-git push
 
 เลือกไฟล์
  → อ่านไฟล์ .txt (ยังไม่อัปโหลด)

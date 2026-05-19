@@ -265,23 +265,7 @@ table.dataTable {
   color: #004c4c;
 }
 
-.stock-header {
-  background-color: #006666;
-  color: #fff;
-  z-index: 10;
-}
 
-.stock-header th {
-  background-color: #006666;
-  color: #fff;
-  border-color: rgba(255,255,255,0.2);
-}
-
-/* ทำให้ sticky ทำงานชัวร์ */
-.table-responsive {
-  max-height: 70vh;
-  overflow-y: auto;
-}
 /*****************************************************************
  * MODULE: END
  *****************************************************************/

@@ -66,9 +66,10 @@ const VIEW_CONFIG = {
   },
 
   vaccination: {
-  view: "/modules/vaccination/vaccination.view.html",
-  init: "initVaccination"
-},
+    view: "/modules/vaccination/vaccination.view.html",
+    script: "/modules/vaccination/vaccination.client.js",
+    init: "initVaccination"
+  },
 
   inventory: {
     view: "/modules/inventory/inventory.view.html",

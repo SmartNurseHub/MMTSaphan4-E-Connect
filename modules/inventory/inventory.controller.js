@@ -6,7 +6,7 @@ const PQueue = require("p-queue").default;
 ================================ */
 const queue = new PQueue({
   concurrency: 1,
-  timeout: 40000,
+  timeout: 70000,
   throwOnTimeout: true
 });
 
