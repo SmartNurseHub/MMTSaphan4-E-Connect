@@ -60,6 +60,37 @@ app.get("/test-reminder", async (req, res) => {
 
 });
 
+const line = require("@line/bot-sdk");
+
+const lineConfig = {
+  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
+  channelSecret: process.env.LINE_CHANNEL_SECRET,
+};
+
+// middleware verify LINE signature (optional but recommended)
+const lineMiddleware = line.middleware(lineConfig);
+
+app.post("/webhook", lineMiddleware, async (req, res) => {
+  try {
+    console.log("🔥 LINE WEBHOOK HIT");
+
+    const events = req.body.events;
+
+    // ถ้ายังไม่ทำ logic ก็แค่ตอบ 200 ไปก่อน
+    if (!events) return res.sendStatus(200);
+
+    // ตัวอย่าง loop events
+    for (const event of events) {
+      console.log("Event:", event.type);
+    }
+
+    return res.sendStatus(200);
+  } catch (err) {
+    console.error("Webhook error:", err);
+    return res.sendStatus(500);
+  }
+});
+
 /* =========================
    SPA FALLBACK
 ========================= */
