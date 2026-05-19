@@ -1,5 +1,5 @@
 /*****************************************************************
- * server.js — NurseStationHub (LINE PRODUCTION FIX FINAL)
+ * server.js — NurseStationHub (FINAL LINE PRODUCTION FIX)
  *****************************************************************/
 
 require("module-alias/register");
@@ -25,20 +25,20 @@ const lineConfig = {
 const client = new line.Client(lineConfig);
 
 /* =========================
-   GLOBAL BODY PARSER (SAFE)
+   BODY PARSER (SAFE)
 ========================= */
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true, limit: "5mb" }));
 
 /* =========================
-   STATIC
+   STATIC FILES
 ========================= */
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/modules", express.static(path.join(__dirname, "modules")));
 app.use("/views", express.static(path.join(__dirname, "views")));
 
 /* =========================
-   API
+   API ROUTES
 ========================= */
 app.use("/api", require("./routes"));
 
@@ -52,7 +52,7 @@ app.use("/api/patient", (req, res, next) => {
 });
 
 /* =========================
-   TEST
+   TEST ROUTE
 ========================= */
 app.get("/test-reminder", async (req, res) => {
   try {
@@ -66,37 +66,43 @@ app.get("/test-reminder", async (req, res) => {
 });
 
 /* =========================
-   LINE WEBHOOK (NO middleware version = STABLE)
+   LINE WEBHOOK (FIXED - NO TIMEOUT)
 ========================= */
-app.post("/webhook", async (req, res) => {
+app.post("/webhook", (req, res) => {
   try {
-    console.log("🔥 WEBHOOK HIT");
+    // 🔥 ต้องตอบทันที (สำคัญที่สุด)
+    res.sendStatus(200);
 
-    const events = req.body?.events;
+    const events = req.body?.events || [];
 
-    if (!events || events.length === 0) {
-      return res.sendStatus(200);
-    }
-
-    for (const event of events) {
-      console.log("📩 EVENT:", event.type);
-
-      if (event.type === "message" && event.message?.type === "text") {
-        const text = event.message.text;
-
-        await client.replyMessage(event.replyToken, {
-          type: "text",
-          text: `📌 คุณพิมพ์ว่า: ${text}`,
-        });
-      }
-    }
-
-    return res.sendStatus(200);
+    events.forEach((event) => {
+      setImmediate(() => handleEvent(event));
+    });
   } catch (err) {
     console.error("❌ WEBHOOK ERROR:", err);
-    return res.sendStatus(200); // สำคัญมาก LINE ต้องได้ 200 เสมอ
+    res.sendStatus(200);
   }
 });
+
+/* =========================
+   EVENT HANDLER
+========================= */
+async function handleEvent(event) {
+  try {
+    if (event.type !== "message") return;
+    if (!event.message || event.message.type !== "text") return;
+
+    const text = event.message.text;
+
+    await client.replyMessage(event.replyToken, {
+      type: "text",
+      text: `📌 คุณพิมพ์ว่า: ${text}`,
+    });
+
+  } catch (err) {
+    console.error("❌ handleEvent error:", err);
+  }
+}
 
 /* =========================
    SPA FALLBACK
