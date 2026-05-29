@@ -3,20 +3,17 @@
 <!-- ===================================== -->
 
 <div class="d-flex justify-content-center mb-3">
-
-  <div class="btn-group flex-wrap">
+  <div class="btn-group">
 
     <!-- ADD VACCINE -->
-    <div class="dropdown me-2 mb-2">
-
+    <div class="dropdown me-2">
       <button class="btn dropdown-toggle"
-              style="background-color:#006666;color:#fff;font-size:12px;"
-              data-bs-toggle="dropdown">
+        style="background-color:#006666;color:#fff;font-size:12px;"
+        data-bs-toggle="dropdown">
         💉 บันทึกการให้วัคซีน
       </button>
 
       <ul class="dropdown-menu">
-
         <li>
           <a href="javascript:void(0)"
              class="dropdown-item open-tab"
@@ -25,17 +22,14 @@
             ➕ เพิ่มการฉีดวัคซีน
           </a>
         </li>
-
       </ul>
-
     </div>
 
     <!-- HISTORY -->
-    <div class="dropdown me-2 mb-2">
-
+    <div class="dropdown me-2">
       <button class="btn dropdown-toggle"
-              style="background-color:#006666;color:#fff;font-size:12px;"
-              data-bs-toggle="dropdown">
+        style="background-color:#006666;color:#fff;font-size:12px;"
+        data-bs-toggle="dropdown">
         📋 ประวัติการฉีด
       </button>
 
@@ -60,20 +54,17 @@
         </li>
 
       </ul>
-
     </div>
 
     <!-- CERTIFICATE -->
-    <div class="dropdown me-2 mb-2">
-
+    <div class="dropdown me-2">
       <button class="btn dropdown-toggle"
-              style="background-color:#006666;color:#fff;font-size:12px;"
-              data-bs-toggle="dropdown">
+        style="background-color:#006666;color:#fff;font-size:12px;"
+        data-bs-toggle="dropdown">
         📄 เอกสารรับรอง
       </button>
 
       <ul class="dropdown-menu">
-
         <li>
           <a href="javascript:void(0)"
              class="dropdown-item"
@@ -82,902 +73,374 @@
             🖨 ออกใบรับรอง PDF
           </a>
         </li>
-
       </ul>
-
     </div>
 
-    <!-- VACCINE MANAGEMENT -->
-    <div class="dropdown mb-2">
-
+    <!-- VACCINE MASTER -->
+    <div class="dropdown">
       <button class="btn dropdown-toggle"
-              style="background-color:#006666;color:#fff;font-size:12px;"
-              data-bs-toggle="dropdown">
+        style="background-color:#006666;color:#fff;font-size:12px;"
+        data-bs-toggle="dropdown">
         🛠 จัดการวัคซีน
       </button>
 
       <ul class="dropdown-menu">
-
-  <li>
-    <a href="javascript:void(0)"
-       class="dropdown-item open-tab"
-       data-tab="vaccineMaster"
-       style="font-size:12px;">
-      📦 Vaccine Master
-    </a>
-  </li>
-
-  <li>
-    <a href="javascript:void(0)"
-       class="dropdown-item open-tab"
-       data-tab="vaccineInventory"
-       style="font-size:12px;">
-      🏪 Vaccine Inventory
-    </a>
-  </li>
-
-  <li>
-    <a href="javascript:void(0)"
-       class="dropdown-item open-tab"
-       data-tab="vaccineSchedule"
-       style="font-size:12px;">
-      📆 Vaccine Schedule
-    </a>
-  </li>
-
-  <!-- ✅ ADD THIS -->
-  <li>
-    <a href="javascript:void(0)"
-       class="dropdown-item open-tab"
-       data-tab="hisImport"
-       style="font-size:12px;">
-      📦 Import HIS ZIP
-    </a>
-  </li>
-  <li>
-  <a href="javascript:void(0)"
-     class="dropdown-item open-tab"
-     data-tab="stockCard">
-    📄 Stock Card
-  </a>
-</li>
-
-</ul>
-
+        <li>
+          <a href="javascript:void(0)"
+             class="dropdown-item open-tab"
+             data-tab="vaccineMaster"
+             style="font-size:12px;">
+            📦 Vaccine Master
+          </a>
+        </li>
+      </ul>
     </div>
 
   </div>
+</div>
 
+<div class="container-fluid p-3">
+
+<!-- ===================================== -->
+<!-- 👤 PATIENT HEADER -->
+<!-- ===================================== -->
+
+<div class="card shadow-sm border-0 my-3">
+  <div class="card-body text-center py-4">
+
+    <h6 class="fw-bold mb-3" style="font-size:20 px;">
+      🔎 ค้นหาผู้รับบริการ
+    </h6>
+
+    <button class="btn text-white" id="searchPatientBtn"style="background-color:#006666; font-size:12px;padding:12px 12px;border-radius:12px;">
+      🔎 ค้นหาผู้รับบริการ
+    </button>
+
+  </div>
 </div>
 
 <!-- ===================================== -->
-<!-- 📊 DASHBOARD -->
+<!-- TAB: ADD VACCINE -->
 <!-- ===================================== -->
 
-<div id="VaccineDashboard" class="container-fluid p-3">
+<div id="addVaccineTab" class="vaccine-tab">
+<div class="row">
+<!-- ================= LEFT ================= -->
+<div class="col-lg-6">
 
-  <div class="card shadow-sm">
+<!-- PATIENT CARD -->
+<div class="card shadow-sm mb-3">
 
-    <div class="card-header text-white"
-         style="background-color:#006666;">
-      📊 รายการฉีดวัคซีนทั้งหมด
-    </div>
+<div class="card-header text-white" style="background-color:#006666; font-size:13px;">
+🧑 ข้อมูลผู้รับบริการ
+</div>
 
-    <div class="card-body">
+<div class="card-body p-2" style="font-size:10px;">
 
-      <div class="table-responsive">
+<div id="patientCard">
 
-        <table class="table table-bordered table-sm"
-               style="font-size:11px;">
-
-          <thead class="table-light">
-
-            <tr>
-              <th width="15%">เลขบัตรประชาชน</th>
-              <th width="15%">ชื่อ-สกุล</th>
-              <th width="25%">วัคซีนที่ฉีด</th>
-              <th width="15%">วันที่ฉีดล่าสุด</th>
-              <th width="15%">วันที่ฉีดครั้งต่อไป</th>
-              <th width="15%">รายละเอียด</th>
-            </tr>
-
-          </thead>
-
-          <tbody id="dashboardTable">
-
-            <tr>
-              <td colspan="6"
-                  class="text-center text-muted">
-                กำลังโหลด...
-              </td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </div>
+<div><b>เลขบัตรประชาชน :</b> <span id="p_cid">-</span></div>
+<div><b>ชื่อ - สกุล :</b> <span id="p_name">-</span></div>
+<div><b>วันเกิด :</b> <span id="p_birth">-</span> &nbsp;&nbsp;|&nbsp;&nbsp; <b>อายุ :</b> <span id="p_age">-</span></div>
 
 </div>
 
+</div>
+</div>
+
+
+<!-- VACCINATION FORM -->
+<div class="card shadow-sm">
+
+<div class="card-header text-white" style="background-color:#006666; font-size:13px;">
+📑 บันทึกการให้วัคซีน
+</div>
+
+<div class="card-body">
+
+<form id="vaccinationForm">
+
+<input type="hidden" id="cid">
+<input type="hidden" id="apid">
+
+<div class="row mb-2">
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">VCN No.</label>
+<input type="text" id="cn" class="form-control" style="font-size:10px;" readonly>
+</div>
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">วันที่ฉีด</label>
+<input type="date" id="recordDate" class="form-control" style="font-size:10px;">
+</div>
+
+</div>
+
+<div class="mb-2">
+<label class="form-label fw-bold" style="font-size:10px;">วัคซีน</label>
+<select id="vaccineType" class="form-select" style="font-size:10px;">
+<option value="">-- เลือกวัคซีน --</option>
+</select>
+</div>
+
+<div class="row mb-2">
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">เข็มที่</label>
+<select id="doseNumber" class="form-select" style="font-size:10px;">
+<option value="">เลือกเข็ม</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</div>
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">Lot Number</label>
+<input type="text" id="lotNumber" class="form-control" style="font-size:10px;">
+</div>
+
+</div>
+
+<div class="row mb-2">
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">ผู้ให้บริการ</label>
+<input type="text" id="providerName" class="form-control" style="font-size:10px;">
+</div>
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">ตำแหน่งผู้ให้บริการ</label>
+<input type="text" id="providerRole" class="form-control" style="font-size:10px;">
+</div>
+
+</div>
+
+<div class="row mb-2">
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">สถานที่</label>
+<input type="text" id="locationType" class="form-control" style="font-size:10px;">
+</div>
+
+<div class="col-md-6">
+<label class="form-label fw-bold" style="font-size:10px;">รายละเอียดสถานที่</label>
+<input type="text" id="locationDetail" class="form-control" style="font-size:10px;">
+</div>
+
+</div>
+
+
+<div class="alert alert-info small" style="font-size:10px;">
+📅 ระบบสามารถคำนวณเข็มถัดไปอัตโนมัติ
+</div>
+
+<button type="submit"
+class="btn w-100"
+style="font-size:10px;font-weight:bold;background:#fba003fd;">
+💾 บันทึกวัคซีน
+</button>
+
+</form>
+
+</div>
+</div>
+
+</div>
+
+
+<!-- ================= RIGHT ================= -->
+
+<div class="col-lg-6">
+<!-- VACCINE SCHEDULE -->
+<div class="card shadow-sm mb-3">
+<div class="card-header bg-light" style="font-size:10px;">
+📅 ตารางนัดวัคซีน
+</div>
+<div class="card-body p-2">
+<table class="table table-sm table-bordered" style="font-size:10px;">
+<thead class="table-light">
+<tr>
+<th>ชื่อวัคซีน</th>
+<th>เข็ม</th>
+<th>วันที่นัด</th>
+<th>สถานะ</th>
+<th>การจัดการ</th>
+</tr>
+</thead>
+
+<tbody id="appointmentTable"></tbody>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+
+<!-- VACCINATION HISTORY -->
+
+<div class="card shadow-sm mb-3">
+
+<div class="card-header bg-light" style="font-size:13px;">
+📜 ประวัติการฉีดวัคซีน
+</div>
+
+<div class="card-body p-2">
+
+<table class="table table-sm table-striped" style="font-size:10px;">
+
+<thead>
+<tr>
+<th>วันที่</th>
+<th>วัคซีน</th>
+<th>เข็ม</th>
+<th>Lot</th>
+</tr>
+</thead>
+
+<tbody id="historyTable">
+
+<tr>
+<td colspan="4" class="text-center text-muted">
+ยังไม่มีประวัติ
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+
+<!-- NEXT DOSE PREVIEW -->
+
+<div class="card shadow-sm">
+
+<div class="card-header bg-light" style="font-size:13px;">
+🔮 เข็มถัดไป
+</div>
+
+<div class="card-body" style="font-size:12px;">
+
+<div id="nextDosePreview">
+
+ยังไม่มีข้อมูล
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
 <!-- ===================================== -->
-<!-- MAIN CONTAINER -->
+<!-- TAB: TIMELINE -->
 <!-- ===================================== -->
 
-<div id="mainContainer"
-     class="container-fluid p-3 d-none">
+<div id="timelineTab" class="vaccine-tab d-none">
 
-  <!-- BACK -->
-  <button class="btn mb-3"
-          style="background-color:#006666;color:#fff;font-size:12px;"
-          onclick="showDashboard()">
-    ⬅ กลับ Dashboard
-  </button>
+<div class="card shadow-sm">
 
-  <!-- ===================================== -->
-  <!-- PATIENT SEARCH -->
-  <!-- ===================================== -->
+<div class="card-header bg-secondary text-white">
+🕒 ประวัติการฉีดแบบ Timeline
+</div>
 
-  <div id="patientSearchCard"
-       class="card shadow-sm border-0 my-3">
+<div class="card-body">
+<div id="vaccinationTimeline">
+ยังไม่มีข้อมูล
+</div>
+</div>
 
-    <div class="card-body text-center py-4">
+</div>
+</div>
 
-      <h6 class="fw-bold mb-3"
-          style="font-size:20px;">
-        🔎 ค้นหาผู้รับบริการ
-      </h6>
+<!-- ===================================== -->
+<!-- TAB: TABLE -->
+<!-- ===================================== -->
 
-      <button class="btn text-white"
-              id="searchPatientBtn"
-              style="background-color:#006666;
-                     font-size:12px;
-                     padding:12px;
-                     border-radius:12px;">
+<div id="tableTab" class="vaccine-tab d-none">
 
-        🔎 ค้นหาผู้รับบริการ
+<div class="card shadow-sm">
 
-      </button>
+<div class="card-header bg-dark text-white">
+📋 ประวัติการฉีดทั้งหมด
+</div>
 
-    </div>
+<div class="card-body">
 
-  </div>
+<div class="table-responsive">
 
-  <!-- ===================================== -->
-  <!-- TAB : ADD VACCINE -->
-  <!-- ===================================== -->
+<table class="table table-bordered table-sm" style="font-size:10px;">
 
-  <div id="addVaccineTab"
-       class="vaccine-tab">
+<thead class="table-light">
+<tr>
+<th>VCN</th>
+<th>วันที่</th>
+<th>วัคซีน</th>
+<th>เข็ม</th>
+<th>Lot</th>
+<th>Provider</th>
+<th>สถานที่</th>
+<th>จัดการ</th>
+</tr>
+</thead>
 
-    <div class="row">
+<tbody id="vaccinationHistoryTable"></tbody>
 
-      <!-- LEFT -->
-      <div class="col-lg-6">
+</table>
 
-        <!-- PATIENT -->
-        <div class="card shadow-sm mb-3">
-
-          <div class="card-header text-white"
-               style="background-color:#006666;font-size:13px;">
-            🧑 ข้อมูลผู้รับบริการ
-          </div>
-
-          <div class="card-body p-2"
-               style="font-size:10px;">
-
-            <div><b>เลขบัตรประชาชน :</b> <span id="p_cid">-</span></div>
-            <div><b>ชื่อ - สกุล :</b> <span id="p_name">-</span></div>
-            <div>
-              <b>วันเกิด :</b> <span id="p_birth">-</span>
-              |
-              <b>อายุ :</b> <span id="p_age">-</span>
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- FORM -->
-        <div class="card shadow-sm">
-
-          <div class="card-header text-white"
-               style="background-color:#006666;font-size:13px;">
-            📑 บันทึกการให้วัคซีน
-          </div>
-
-          <div class="card-body">
-
-            <form id="vaccinationForm">
-
-              <input type="hidden" id="cid">
-              <input type="hidden" id="apid">
-
-              <div class="row mb-2">
-
-                <div class="col-md-6">
-                  <label class="form-label fw-bold"
-                         style="font-size:10px;">
-                    VCN No.
-                  </label>
-
-                  <input type="text"
-                         id="cn"
-                         class="form-control"
-                         readonly>
-                </div>
-
-                <div class="col-md-6">
-                  <label class="form-label fw-bold"
-                         style="font-size:10px;">
-                    วันที่ฉีด
-                  </label>
-
-                  <input type="date"
-                         id="recordDate"
-                         class="form-control">
-                </div>
-
-              </div>
-
-              <div class="mb-2">
-
-                <label class="form-label fw-bold"
-                       style="font-size:10px;">
-                  วัคซีน
-                </label>
-
-                <select id="vaccineType"
-                        class="form-select">
-                  <option value="">-- เลือกวัคซีน --</option>
-                </select>
-
-              </div>
-
-              <div class="row mb-2">
-
-                <div class="col-md-6">
-
-                  <label class="form-label fw-bold"
-                         style="font-size:10px;">
-                    เข็มที่
-                  </label>
-
-                  <select id="doseNumber"
-                          class="form-select">
-
-                    <option value="">เลือกเข็ม</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-
-                  </select>
-
-                </div>
-
-                <div class="col-md-6">
-
-                  <label class="form-label fw-bold"
-                         style="font-size:10px;">
-                    Lot Number
-                  </label>
-
-                  <input type="text"
-                         id="lotNumber"
-                         class="form-control">
-
-                </div>
-
-              </div>
-
-              <button type="submit"
-                      class="btn w-100"
-                      style="font-size:10px;
-                             font-weight:bold;
-                             background:#fba003fd;">
-
-                💾 บันทึกวัคซีน
-
-              </button>
-
-            </form>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- RIGHT -->
-      <div class="col-lg-6">
-
-        <!-- APPOINTMENT -->
-        <div class="card shadow-sm mb-3">
-
-          <div class="card-header bg-light"
-               style="font-size:10px;">
-            📅 ตารางนัดวัคซีน
-          </div>
-
-          <div class="card-body p-2">
-
-            <table class="table table-sm table-bordered"
-                   style="font-size:10px;">
-
-              <thead class="table-light">
-
-                <tr>
-                  <th>ชื่อวัคซีน</th>
-                  <th>เข็ม</th>
-                  <th>วันที่นัด</th>
-                  <th>สถานะ</th>
-                  <th>การจัดการ</th>
-                </tr>
-
-              </thead>
-
-              <tbody id="appointmentTable"></tbody>
-
-            </table>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ===================================== -->
-  <!-- TIMELINE TAB -->
-  <!-- ===================================== -->
-
-  <div id="timelineTab"
-       class="vaccine-tab d-none">
-
-    <div class="card shadow-sm">
-
-      <div class="card-header bg-secondary text-white">
-        🕒 ประวัติการฉีดแบบ Timeline
-      </div>
-
-      <div class="card-body">
-
-        <div id="vaccinationTimeline">
-          ยังไม่มีข้อมูล
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ===================================== -->
-  <!-- TABLE TAB -->
-  <!-- ===================================== -->
-
-  <div id="tableTab"
-       class="vaccine-tab d-none">
-
-    <div class="card shadow-sm">
-
-      <div class="card-header bg-dark text-white">
-        📋 ประวัติการฉีดทั้งหมด
-      </div>
-
-      <div class="card-body">
-
-        <div class="table-responsive">
-
-          <table class="table table-bordered table-sm"
-                 style="font-size:10px;">
-
-            <thead class="table-light">
-
-              <tr>
-                <th>VCN</th>
-                <th>วันที่</th>
-                <th>วัคซีน</th>
-                <th>เข็ม</th>
-                <th>Lot</th>
-                <th>Provider</th>
-                <th>สถานที่</th>
-                <th>จัดการ</th>
-              </tr>
-
-            </thead>
-
-            <tbody id="vaccinationTableBody"></tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ===================================== -->
-  <!-- VACCINE MASTER TAB -->
-  <!-- ===================================== -->
-
-  <div id="vaccineMasterTab"
-       class="vaccine-tab d-none">
-
-    <div class="card shadow-sm">
-
-      <div class="card-header text-white"
-           style="background-color:#006666;">
-        📦 Vaccine Master
-      </div>
-
-      <div class="card-body">
-
-        <div id="vaccineMasterContent">
-          กำลังโหลด...
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <!-- ===================================== -->
-  <!-- VACCINE SCHEDULE TAB -->
-  <!-- ===================================== -->
-
-  <div id="vaccineScheduleTab"
-       class="vaccine-tab d-none">
-
-    <div class="card shadow-sm">
-
-      <div class="card-header text-white"
-           style="background-color:#006666;">
-        📆 Vaccine Schedule
-      </div>
-
-      <div class="card-body">
-
-        <div id="vaccineScheduleContent">
-          กำลังโหลด...
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
+</div>
+</div>
+</div>
 </div>
 
 <!-- ===================================== -->
 <!-- PATIENT SEARCH MODAL -->
 <!-- ===================================== -->
 
-<div class="modal fade"
-     id="patientSearchModal"
-     tabindex="-1">
+<div class="modal fade" id="patientSearchModal" tabindex="-1">
 
-  <div class="modal-dialog modal-lg">
+<div class="modal-dialog modal-lg">
 
-    <div class="modal-content">
+<div class="modal-content">
 
-      <div class="modal-header">
+<div class="modal-header">
+<h5 class="modal-title">ค้นหาผู้ป่วย</h5>
+<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+</div>
 
-        <h5 class="modal-title">
-          ค้นหาผู้ป่วย
-        </h5>
+<div class="modal-body">
 
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="modal">
-        </button>
+<table class="table table-striped" >
 
-      </div>
+<thead>
+<tr>
+<th>CID</th>
+<th>ชื่อ</th>
+<th>วันเกิด</th>
+<th>อายุ</th>
+<th>โทรศัพท์</th>
+<th>เลือก</th>
+</tr>
+</thead>
 
-      <div class="modal-body">
+<tbody id="patientSearchTable"></tbody>
 
-        <table class="table table-striped">
-
-          <thead>
-
-            <tr>
-              <th>CID</th>
-              <th>ชื่อ</th>
-              <th>วันเกิด</th>
-              <th>อายุ</th>
-              <th>โทรศัพท์</th>
-              <th>เลือก</th>
-            </tr>
-
-          </thead>
-
-          <tbody id="patientSearchTable"></tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </div>
+</table>
 
 </div>
 
-<!-- ===================================== -->
-<!-- VACCINE MODAL -->
-<!-- ===================================== -->
-
-<div id="vaccineModal"
-     class="modal fade"
-     tabindex="-1">
-
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-
-      <div class="modal-header">
-
-        <h5 id="modalTitle">
-          Vaccine
-        </h5>
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="modal">
-        </button>
-
-      </div>
-
-      <div class="modal-body">
-
-        <div class="mb-3">
-
-          <button class="btn btn-sm btn-primary"
-                  onclick="switchTab('manual')">
-            Manual
-          </button>
-
-          <button class="btn btn-sm btn-success"
-                  onclick="switchTab('excel')">
-            Excel
-          </button>
-
-        </div>
-
-        <!-- MANUAL -->
-        <div id="manualTab">
-
-          <input id="vacCode"
-                 class="form-control mb-2"
-                 placeholder="Code">
-
-          <input id="vacName"
-                 class="form-control mb-2"
-                 placeholder="Name">
-
-          <button class="btn btn-success"
-                  onclick="saveManualVaccine()">
-            Save
-          </button>
-
-        </div>
-
-        <!-- EXCEL -->
-        <div id="excelTab"
-             style="display:none;">
-
-          <input type="file"
-                 id="excelFile"
-                 class="form-control mb-2">
-
-          <button class="btn btn-primary mb-2"
-                  onclick="handleExcelUpload()">
-            Preview
-          </button>
-
-          <div id="excelPreview"></div>
-
-          <button class="btn btn-success mt-2"
-                  onclick="saveSelectedVaccines()">
-            Save Selected
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- ====================================== -->
-<!-- VACCINE INVENTORY PAGE -->
-<!-- ====================================== -->
-
-<div id="vaccineInventoryPage"
-     class="vaccine-tab d-none">
-
-  <div class="card shadow-sm border-0">
-
-    <!-- HEADER -->
-    <div class="card-header bg-success text-white d-flex
-                justify-content-between align-items-center">
-
-      <div>
-        🏪 Vaccine Inventory
-      </div>
-
-      <button class="btn btn-light btn-sm"
-              onclick="openInventoryModal()">
-
-        ➕ รับเข้าวัคซีน
-
-      </button>
-
-    </div>
-
-    <!-- BODY -->
-    <div class="card-body">
-
-      <div class="table-responsive">
-
-        <table class="table table-bordered table-hover align-middle">
-
-          <thead class="table-success">
-
-            <tr style="font-size:12px;">
-
-              <th>Code</th>
-              <th>Name</th>
-              <th>Quantity</th>
-              <th>Lot</th>
-              <th>Exp</th>
-              <th>DateReceived</th>
-              <th>จัดการ</th>
-
-            </tr>
-
-          </thead>
-
-          <tbody id="inventoryTableBody">
-
-            <tr>
-              <td colspan="7">
-                  class="text-center text-muted">
-
-                ไม่มีข้อมูล
-
-              </td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<!-- ====================================== -->
-<!-- VACCINE INVENTORY MODAL -->
-<!-- ====================================== -->
-
-<div class="modal fade"
-     id="vaccineInventoryModal"
-     tabindex="-1">
-
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-
-    <div class="modal-content border-0 shadow">
-
-      <!-- HEADER -->
-      <div class="modal-header bg-success text-white">
-
-        <h5 class="modal-title">
-          🏪 Vaccine Inventory
-        </h5>
-
-        <button type="button"
-                class="btn-close btn-close-white"
-                data-bs-dismiss="modal">
-        </button>
-
-      </div>
-
-      <!-- BODY -->
-      <div class="modal-body">
-
-        <div class="row g-3">
-
-          <!-- CODE -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              Vaccine
-            </label>
-
-            <select id="invCode"
-                    class="form-select">
-
-              <option value="">
-                เลือกวัคซีน
-              </option>
-
-            </select>
-
-          </div>
-
-          <!-- QTY -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              Quantity
-            </label>
-
-            <input type="number"
-                   id="invQty"
-                   class="form-control">
-
-          </div>
-
-          <!-- LOT -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              Lot Number
-            </label>
-
-            <input type="text"
-                   id="invLot"
-                   class="form-control">
-
-          </div>
-
-          <!-- EXP -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              Expiry Date
-            </label>
-
-            <input type="date"
-                   id="invExp"
-                   class="form-control">
-
-          </div>
-
-          <!-- FROM -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              From
-            </label>
-
-            <input type="text"
-                   id="invFrom"
-                   class="form-control">
-
-          </div>
-
-          <!-- PROVIDER -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              Provider
-            </label>
-
-            <input type="text"
-                   id="invProvider"
-                   class="form-control">
-
-          </div>
-          <!-- DATE RECEIVED -->
-          <div class="col-md-6">
-
-            <label class="form-label">
-              Date Received
-            </label>
-
-            <input type="date"
-                   id="invDateReceived"
-                   class="form-control">
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- FOOTER -->
-      <div class="modal-footer">
-
-        <button class="btn btn-secondary"
-                data-bs-dismiss="modal">
-
-          ปิด
-
-        </button>
-
-        <button class="btn btn-success"
-                onclick="saveInventory()">
-
-          💾 บันทึก Inventory
-
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
 </div>
 </div>
-
-
-<!-- ===================================== -->
-<!-- HIS IMPORT TAB -->
-<!-- ===================================== -->
-
-<div id="hisImportTab"
-     class="vaccine-tab d-none">
-
-  <div class="card shadow-sm">
-
-    <div class="card-header text-white"
-         style="background-color:#006666;">
-
-      📦 Import HIS ZIP
-
-    </div>
-
-    <div class="card-body">
-
-      <input
-        type="file"
-        id="hisZipFile"
-        accept=".zip"
-        class="form-control mb-3"
-      />
-
-      <button
-        class="btn btn-primary"
-        onclick="uploadHISZip()">
-
-        Upload HIS ZIP
-
-      </button>
-
-      <hr>
-
-      <div id="hisPreview">
-
-        ยังไม่มีข้อมูล
-
-      </div>
-
-    </div>
-
-  </div>
-
 </div>
-

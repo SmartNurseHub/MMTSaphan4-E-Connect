@@ -114,23 +114,27 @@ window.NursingOnlineActions = (() => {
 
       }
 
-      PatientCore.searchPatientCore(keyword, rows => {
+PatientCore.searchPatientCore(keyword, rows => {
 
-        PatientCore.renderPatientResults(
-          resultBox,
-          rows,
-          patient => {
+  console.log("SEARCH ROWS =", rows);
 
-            if (window.fillNursingForm) {
-              window.fillNursingForm(patient);
-            }
+  PatientCore.renderPatientResults(
+    resultBox,
+    rows,
+    patient => {
 
-            hideResults();
+      if (window.fillNursingForm) {
+        window.fillNursingForm(patient);
+      }
 
-          }
-        );
+      hideResults();
 
-      });
+    }
+  );
+
+  resultBox.style.display = "block";
+
+});
 
     };
 

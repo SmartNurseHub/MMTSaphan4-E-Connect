@@ -59,16 +59,18 @@ app.get("/test-reminder", async (req, res) => {
    - ไม่ block event loop
 ========================= */
 app.post("/webhook", (req, res) => {
-  res.status(200).send("OK");
 
-  setImmediate(async () => {
-    try {
-      await handleWebhook(req.body);
-    } catch (err) {
+  console.log("🔥 WEBHOOK HIT");
+
+  res.sendStatus(200);
+
+  handleWebhook(req.body)
+    .catch(err => {
       console.error("Webhook error:", err);
-    }
-  });
+    });
+
 });
+
 
 /* =========================
    SPA FALLBACK

@@ -1,137 +1,35 @@
+/******************************************************************
+ * VACCINATION ROUTES
+ * เส้นทาง API สำหรับระบบ Vaccination
+ ******************************************************************/
+
 const express = require("express");
 const router = express.Router();
-
 const controller = require("./vaccination.controller");
-const upload = require("../../middleware/upload");
 
-/* =========================================================
-   VACCINE MASTER
-========================================================= */
+/* =======================================================
+   TIMELINE, LATEST, HISTORY
+======================================================= */
+router.get("/timeline/:cid", controller.timeline);      // ประวัติ timeline ของผู้ป่วย
+router.get("/latest/:cid", controller.latest);          // วัคซีนล่าสุด
+router.get("/history/:cid", controller.history);        // ประวัติการฉีดทั้งหมด (secure / public)
 
-router.get("/master", controller.getVaccineMaster);
+/* =======================================================
+   VACCINE MASTER & NEXT VCN
+======================================================= */
+router.get("/master", controller.getVaccineMaster);     // รายการวัคซีนทั้งหมด
+router.get("/next-vcn", controller.getNextVCN);         // เลข VCN ถัดไปสำหรับการฉีด
 
-router.post("/master", controller.saveVaccineMaster);
+/* =======================================================
+   ADD / DELETE / SEND
+======================================================= */
+router.post("/add", controller.addVaccination);         // เพิ่มรายการวัคซีนใหม่
+router.delete("/delete/:vcn", controller.deleteVaccination); // ลบรายการวัคซีน (แก้ตรงนี้)
+router.post("/send-line/:vcn", controller.sendLineVaccine);   // ส่งข้อมูลไป LINE
 
-router.post("/master/bulk", controller.saveBulkVaccineMaster);
-
-
-/* =========================================================
-   VACCINATION TRANSACTION
-========================================================= */
-
-router.post("/add", controller.addVaccination);
-
-router.delete("/delete/:vcn", controller.deleteVaccination);
-
-
-/* =========================================================
-   INVENTORY
-========================================================= */
-
-router.post("/inventory/create", controller.createInventory);
-
-router.get("/inventory/master", controller.getInventoryMaster);
-
-router.get("/inventory", controller.getInventory);
-
-router.get("/inventory/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    const data = await db.findInventory(id);
-
-    if (!data) {
-      return res.status(404).json({
-        success: false,
-        error: "NOT FOUND",
-      });
-    }
-
-    return res.json({
-      success: true,
-      data,
-    });
-
-  } catch (err) {
-    console.error("inventory/:id error:", err);
-
-    return res.status(500).json({
-      success: false,
-      error: err.message,
-    });
-  }
-});
-
-
-/* =========================================================
-   TIMELINE / HISTORY
-========================================================= */
-
-router.get("/timeline/:cid", controller.getVaccinationTimeline);
-
-router.get("/latest/:cid", controller.getLatestVaccines);
-
-router.get("/history/:cid", controller.getVaccinationHistory);
-
-router.get("/history-secure/:cid/:lineUID", controller.historySecure);
-
-router.post(
-  "/his/upload",
-  upload.single("file"),
-  controller.uploadHISZip
-);
-
-
-/* =========================================================
-   DASHBOARD / SCHEDULE
-========================================================= */
-
-router.get("/dashboard", controller.getDashboard);
-
-router.get("/schedule", controller.getSchedule);
-
-router.get("/next-vcn", controller.getNextVCN);
-
-router.get("/appointments/:cid", controller.getAppointments);
-
-
-/* =========================================================
-   HIS IMPORT (INLINE HANDLER)
-========================================================= */
-
-router.post(
-  "/his-import",
-  upload.single("file"),
-  async (req, res) => {
-    try {
-      const zipPath = req.file.path;
-
-      // TODO: parse zip here
-
-      return res.json({
-        success: true,
-        data: {
-          file: req.file.originalname,
-        },
-      });
-
-    } catch (err) {
-      console.error(err);
-
-      return res.json({
-        success: false,
-        error: err.message,
-      });
-    }
-  }
-);
-
-
-/* =========================================================
-   LINE NOTIFICATION
-========================================================= */
-
-router.post("/send-line/:vcn", controller.sendLineByButton);
-
+/* =======================================================
+   SECURE HISTORY FOR LINE
+======================================================= */
+router.get("/history-secure/:cid/:lineUID", controller.historySecure); // ประวัติ secure ผ่าน LINE UID
 
 module.exports = router;

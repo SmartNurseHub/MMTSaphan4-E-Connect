@@ -112,3 +112,43 @@ exports.deleteLineUID = async (rowIndex) => {
 
   console.log("✅ DELETE SUCCESS:", rowIndex);
 };
+
+
+exports.findLineUser = async (userId) => {
+
+  try {
+
+    const rows =
+      await exports.getLineUIDList();
+
+    const found = rows.find(
+      r => r.userId === userId
+    );
+
+    if (found) {
+
+      return {
+        found: true,
+        data: found
+      };
+
+    }
+
+    return {
+      found: false
+    };
+
+  } catch (err) {
+
+    console.error(
+      "❌ findLineUser:",
+      err
+    );
+
+    return {
+      found: false
+    };
+
+  }
+
+};

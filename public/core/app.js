@@ -84,35 +84,44 @@ const VIEW_CONFIG = {
 ========================================= */
 async function loadScriptOnce(src) {
 
-  // โหลดแล้วใน memory
+  // โหลดแล้ว
   if (loadedScripts.has(src)) {
     console.log("⚠️ Script already cached:", src);
     return;
   }
 
-  // มี script อยู่แล้วใน DOM
-  const existing = document.querySelector(`script[src="${src}"]`);
-
-  if (existing) {
-    console.log("⚠️ Script tag already exists:", src);
-
-    // ถือว่าโหลดเสร็จแล้วทันที
-    loadedScripts.set(src, true);
-
-    return;
-  }
-
-  // โหลดใหม่
   await new Promise((resolve, reject) => {
 
-    const script = document.createElement("script");
+    // มี script อยู่แล้ว
+    let script =
+      document.querySelector(`script[src="${src}"]`);
 
-    script.src = src;
-    script.async = true;
+    // ถ้ายังไม่มี → สร้างใหม่
+    if (!script) {
 
+      script = document.createElement("script");
+
+      script.src = src;
+
+      script.defer = true;
+
+      document.body.appendChild(script);
+    }
+
+    // โหลดเสร็จแล้ว
+    if (script.dataset.loaded === "true") {
+
+      loadedScripts.set(src, true);
+
+      return resolve();
+    }
+
+    // รอโหลด
     script.onload = () => {
 
       console.log("✅ Script loaded:", src);
+
+      script.dataset.loaded = "true";
 
       loadedScripts.set(src, true);
 
@@ -126,9 +135,8 @@ async function loadScriptOnce(src) {
       reject(err);
     };
 
-    document.body.appendChild(script);
-
   });
+
 }
 /* =========================================
    LOAD VIEW

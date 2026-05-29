@@ -9,17 +9,23 @@ let followerData = [];
  *****************************************************************/
 async function initDashboard() {
 
-  // 🔥 FIX: รอ DOM render
+  console.log("🚀 initDashboard");
+
   setTimeout(async () => {
+
+    console.log("🔥 start loading dashboard");
+
     await loadLineUIDTable();
+
     await loadPatients();
+
     await loadFollowers();
+
   }, 100);
 
 }
 
-document.addEventListener("DOMContentLoaded", initDashboard);
-window.initDashboard = initDashboard;
+
 
 /*****************************************************************
  * UTIL
@@ -40,9 +46,18 @@ function formatThaiDateShort(isoDate) {
 const btn = document.getElementById("reportsBtn");
 const sub = document.getElementById("reportsSub");
 
-btn.addEventListener("click", () => {
-  sub.style.display = sub.style.display === "block" ? "none" : "block";
-});
+if (btn && sub) {
+
+  btn.addEventListener("click", () => {
+
+    sub.style.display =
+      sub.style.display === "block"
+        ? "none"
+        : "block";
+
+  });
+
+}
 
 // ไปหน้า inventory
 function goInventory(){
@@ -51,35 +66,47 @@ function goInventory(){
 
 
 async function loadLineUIDTable() {
+
   try {
-    const res = await fetch("/api/dashboard/lineuid");
+
+    console.log("🔥 loadLineUIDTable");
+
+    const res =
+      await fetch("/api/dashboard/lineuid");
+
+    console.log("STATUS =", res.status);
+
     const json = await res.json();
 
-    const tbody = document.getElementById("followTableBody");
+    console.log("JSON =", json);
+
+    const tbody =
+      document.getElementById("followTableBody");
+
+    console.log("TBODY =", tbody);
+
     if (!tbody) return;
 
     tbody.innerHTML = "";
 
-    if (!json.success || !Array.isArray(json.data)) {
+    if (!json.success) {
+
       tbody.innerHTML =
         "<tr><td colspan='7'>โหลดข้อมูลไม่สำเร็จ</td></tr>";
+
       return;
     }
 
-    if (json.data.length === 0) {
-      tbody.innerHTML =
-        "<tr><td colspan='7' class='text-muted'>ไม่พบข้อมูล</td></tr>";
-      return;
-    }
-
-    // 🔥 เก็บ data สำหรับ search
-    followerData = json.data;
+    followerData = json.data || [];
 
     renderFollowerTable(followerData);
 
   } catch (err) {
+
     console.error("❌ loadLineUIDTable error:", err);
+
   }
+
 }
 
 function renderFollowerTable(data) {
@@ -376,43 +403,6 @@ document.addEventListener("input", function (e) {
 
 });
 
+document.addEventListener("DOMContentLoaded", initDashboard);
 
-/*************************************************
- * DASHBOARD MODULE
- *************************************************/
-
-/*************************************************
- * DASHBOARD MODULE
- *************************************************/
-
-(() => {
-
-if(window.__DASHBOARD_MODULE_LOADED__){
-  console.warn("⚠️ dashboard.client.js already loaded");
-  return;
-}
-
-window.__DASHBOARD_MODULE_LOADED__ = true;
-
-console.log("📊 dashboard.client.js LOADED");
-
-/*************************************************
- * INIT
- *************************************************/
-window.initDashboard = async function(){
-
-  console.log("🚀 initDashboard");
-
-  try{
-
-    // โหลด dashboard data ตรงนี้
-
-  }catch(err){
-
-    console.error("❌ initDashboard:", err);
-
-  }
-
-};
-
-})();
+globalThis.initDashboard = initDashboard;

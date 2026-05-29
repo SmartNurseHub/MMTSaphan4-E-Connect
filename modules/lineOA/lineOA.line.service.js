@@ -295,7 +295,7 @@ async function pushFlexResult({
 
       hero: {
         type: "image",
-        url: "https://drive.google.com/uc?export=view&id=1O366lb3XphBKeVv51F5nNHIOEvdEh-jI",
+        url: "https://drive.google.com/uc?export=view&id=1YNIgpnlAq1_CxpT40M2F7Sg1HsV3DnJ2",
         size: "full",
         aspectRatio: "20:13",
         aspectMode: "cover"

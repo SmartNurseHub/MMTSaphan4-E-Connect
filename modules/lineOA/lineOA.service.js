@@ -231,17 +231,47 @@ async function handleChatMessage(event) {
 ========================================================= */
 
 async function sendReport(nsr) {
+
   const record = await nursingService.getByNSR(nsr);
-  if (!record) throw new Error("NSR not found");
+
+  if (!record) {
+    throw new Error("NSR not found");
+  }
 
   const rows = await readRows(LINE_UID_SHEET);
 
-  const user = rows.find(r =>
-    norm(r[1]) === norm(record.CID) &&
-    norm(r[7]).toUpperCase() === "ACTIVE"
-  );
+  const cid =
+    record.CID ||
+    record.cid ||
+    record.CitizenID ||
+    record.citizenId ||
+    "";
 
-  if (!user) throw new Error("User not linked LINE");
+  console.log("📌 RECORD =", record);
+  console.log("📌 SEARCH CID =", cid);
+
+  const user = rows.find((r, i) => {
+
+    if (i === 0) return false;
+
+    console.log({
+      sheetCID: norm(r[1]),
+      targetCID: norm(cid),
+      status: norm(r[7]).toUpperCase()
+    });
+
+    return (
+      norm(r[1]) === norm(cid) &&
+      norm(r[7]).toUpperCase() === "ACTIVE"
+    );
+
+  });
+
+  console.log("📌 FOUND USER =", user);
+
+  if (!user) {
+    throw new Error(`User not linked LINE : ${cid}`);
+  }
 
   const userId = norm(user[4]);
 

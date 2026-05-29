@@ -97,7 +97,26 @@ router.get("/health", (req, res) => {
   res.json({ status: "LINE OA OK" });
 });
 
+const {
+  broadcastRegister
+} = require("./line.broadcast.service");
 
+router.post("/broadcast", async (req, res) => {
+  try {
+
+    if (req.query.key !== process.env.ADMIN_KEY) {
+      return res.status(403).send("Forbidden");
+    }
+
+    await broadcastRegister();
+
+    res.json({ success: true, message: "Broadcast sent" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false });
+  }
+});
 /* =========================================================
    EXPORT
 ========================================================= */
