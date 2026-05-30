@@ -58,16 +58,15 @@ app.get("/test-reminder", async (req, res) => {
    - ต้องตอบทันที
    - ไม่ block event loop
 ========================= */
-app.post("/webhook", (req, res) => {
-
-  console.log("🔥 WEBHOOK HIT");
+app.post("/webhook", async (req, res) => {
 
   res.sendStatus(200);
 
-  handleWebhook(req.body)
-    .catch(err => {
-      console.error("Webhook error:", err);
-    });
+  try {
+    await handleWebhook(req.body);
+  } catch (err) {
+    console.error(err);
+  }
 
 });
 

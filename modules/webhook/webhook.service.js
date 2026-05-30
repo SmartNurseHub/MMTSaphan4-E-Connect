@@ -22,6 +22,34 @@ const lineClient = new Client({
 });
 
 // =====================================================
+// SAFE REPLY
+// =====================================================
+
+async function safeReply(replyToken, msg) {
+  try {
+    await lineClient.replyMessage(replyToken, msg);
+    return true;
+  } catch (err) {
+    console.error("❌ REPLY ERROR:", err?.originalError?.response?.data || err);
+    return false;
+  }
+}
+
+// =====================================================
+// SAFE PUSH (fallback)
+// =====================================================
+
+async function safePush(userId, msg) {
+  try {
+    await lineClient.pushMessage(userId, msg);
+    return true;
+  } catch (err) {
+    console.error("❌ PUSH ERROR:", err?.originalError?.response?.data || err);
+    return false;
+  }
+}
+
+// =====================================================
 // MAIN WEBHOOK
 // =====================================================
 
@@ -47,52 +75,47 @@ async function handleWebhook(body) {
 
           console.log("NEW FOLLOW:", userId);
 
-          // เช็คก่อน save
-          const exists =
-            await findLineUser(userId);
-
-          // ---------------------------------
-          // USER EXISTS
-          // ---------------------------------
+          const exists = await findLineUser(userId);
 
           if (exists.found) {
 
-            console.log(
-              "FOLLOW USER EXISTS"
-            );
+            const ok = await safeReply(event.replyToken, {
+              type: "text",
+              text: "ยินดีต้อนรับกลับ 🙏"
+            });
 
-            return;
+            if (!ok) {
+              await safePush(userId, {
+                type: "text",
+                text: "ยินดีต้อนรับกลับ 🙏"
+              });
+            }
+
+            continue;
           }
 
-          // ---------------------------------
-          // NEW FOLLOW USER
-          // ---------------------------------
-
-          const profile =
-            await lineClient.getProfile(userId);
+          const profile = await lineClient.getProfile(userId);
 
           await addLineUID({
             userId,
-            displayName:
-              profile.displayName || "",
-            pictureUrl:
-              profile.pictureUrl || "",
+            displayName: profile.displayName || "",
+            pictureUrl: profile.pictureUrl || "",
             status: "PENDING_CID"
           });
 
-          console.log(
-            "NEW FOLLOW USER SAVED"
-          );
+          const ok = await safeReply(event.replyToken, {
+            type: "text",
+            text: "ขอบคุณที่เพิ่มเพื่อน 🙏\nกรุณาพิมพ์ 'ลงทะเบียน'"
+          });
 
-          await lineClient.replyMessage(
-            event.replyToken,
-            {
+          if (!ok) {
+            await safePush(userId, {
               type: "text",
-              text:
-                "ขอบคุณที่เพิ่มเพื่อน 🙏\nกรุณาพิมพ์ 'ลงทะเบียน'"
-            }
-          );
+              text: "ขอบคุณที่เพิ่มเพื่อน 🙏 กรุณาพิมพ์ 'ลงทะเบียน'"
+            });
+          }
 
+          continue;
         }
 
         // =================================================
@@ -101,133 +124,106 @@ async function handleWebhook(body) {
 
         if (event.type === "message") {
 
-          const userId =
-            event.source?.userId;
-
-          const text =
-            (event.message?.text || "").trim();
+          const userId = event.source?.userId;
+          const text = (event.message?.text || "").trim();
 
           console.log("UID:", userId);
-
           console.log("TEXT:", text);
 
-          // =============================================
-          // REGISTRATION STATE MACHINE
-          // =============================================
+          // =================================================
+          // STATE MACHINE
+          // =================================================
 
-          const handled =
-            await handleRegistrationFlow(
+          let handled = false;
+
+          try {
+            handled = await handleRegistrationFlow(
               lineClient,
               userId,
               text,
               event.replyToken
             );
 
-          if (handled) {
+            console.log("REG FLOW RESULT:", handled);
 
-            console.log(
-              "STATE MACHINE HANDLED"
-            );
+          } catch (err) {
+            console.error("REG FLOW ERROR:", err);
 
-            return;
+            await safeReply(event.replyToken, {
+              type: "text",
+              text: "ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง"
+            });
+
+            continue;
           }
 
-          // =============================================
-          // REGISTER COMMAND
-          // =============================================
+          if (handled) {
+            continue;
+          }
+
+          // =================================================
+          // COMMAND: ลงทะเบียน
+          // =================================================
 
           if (text === "ลงทะเบียน") {
 
-            console.log("REGISTER FLOW");
-
-            const exists =
-              await findLineUser(userId);
-
-            // =========================================
-            // USER EXISTS
-            // =========================================
+            const exists = await findLineUser(userId);
 
             if (exists.found) {
 
-              const status =
-                exists.data?.status || "";
+              const status = exists.data?.status || "";
 
-              console.log(
-                "USER STATUS:",
-                status
-              );
-
-              // ---------------------------------------
-              // PENDING_CID
-              // ---------------------------------------
-
-              if (
-                status === "PENDING_CID"
-              ) {
-
-                await lineClient.replyMessage(
-                  event.replyToken,
-                  {
-                    type: "text",
-                    text:
-                      "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
-                  }
-                );
-
-                return;
+              if (status === "PENDING_CID") {
+                await safeReply(event.replyToken, {
+                  type: "text",
+                  text: "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
+                });
+                continue;
               }
-
-              // ---------------------------------------
-              // ACTIVE
-              // ---------------------------------------
 
               if (status === "ACTIVE") {
-
-                await lineClient.replyMessage(
-                  event.replyToken,
-                  {
-                    type: "text",
-                    text:
-                      "ท่านลงทะเบียนเรียบร้อยแล้ว ✅"
-                  }
-                );
-
-                return;
+                await safeReply(event.replyToken, {
+                  type: "text",
+                  text: "ท่านลงทะเบียนเรียบร้อยแล้ว ✅"
+                });
+                continue;
               }
-
             }
 
-            // =========================================
-            // OLD USER NOT FOUND IN SHEET
-            // =========================================
-
-            const profile =
-              await lineClient.getProfile(userId);
+            const profile = await lineClient.getProfile(userId);
 
             await addLineUID({
               userId,
-              displayName:
-                profile.displayName || "",
-              pictureUrl:
-                profile.pictureUrl || "",
+              displayName: profile.displayName || "",
+              pictureUrl: profile.pictureUrl || "",
               status: "PENDING_CID"
             });
 
-            console.log(
-              "OLD USER SAVED"
-            );
+            await safeReply(event.replyToken, {
+              type: "text",
+              text: "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
+            });
 
-            await lineClient.replyMessage(
-              event.replyToken,
-              {
-                type: "text",
-                text:
-                  "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
-              }
-            );
-
+            continue;
           }
 
+          // =================================================
+          // FALLBACK (NO SILENT MODE)
+          // =================================================
+
+          const ok = await safeReply(event.replyToken, {
+            type: "text",
+            text: "กรุณาพิมพ์ 'ลงทะเบียน' เพื่อเริ่มใช้งาน"
+          });
+
+          if (!ok) {
+            await safePush(userId, {
+              type: "text",
+              text: "กรุณาพิมพ์ 'ลงทะเบียน' เพื่อเริ่มใช้งาน"
+            });
+          }
+
+          continue;
         }
 
         // =================================================
@@ -236,61 +232,39 @@ async function handleWebhook(body) {
 
         if (event.type === "postback") {
 
-          const data =
-            event.postback?.data;
+          const data = event.postback?.data;
 
-          console.log(
-            "📌 postback:",
-            data
-          );
+          console.log("📌 postback:", data);
 
-          // =============================================
-          // CONFIRM VACCINE
-          // =============================================
+          if (data?.startsWith("CONFIRM_VACCINE")) {
 
-          if (
-            data?.startsWith(
-              "CONFIRM_VACCINE"
-            )
-          ) {
+            const vcn = data.split(":")[1];
 
-            const vcn =
-              data.split(":")[1];
-
-            sendLineVaccine(vcn)
-              .catch(err => {
-
-                console.error(
-                  "sendLineVaccine error:",
-                  err
-                );
-
-              });
+            sendLineVaccine(vcn).catch(err => {
+              console.error("sendLineVaccine error:", err);
+            });
 
           }
 
+          continue;
         }
 
       } catch (eventErr) {
 
-        console.error(
-          "EVENT ERROR:",
-          eventErr
-        );
+        console.error("EVENT ERROR:", eventErr);
 
+        try {
+          await safeReply(event.replyToken, {
+            type: "text",
+            text: "ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง"
+          });
+        } catch (e) {}
       }
-
     }
 
   } catch (err) {
-
-    console.error(
-      "❌ WEBHOOK ERROR:",
-      err
-    );
-
+    console.error("❌ WEBHOOK ERROR:", err);
   }
-
 }
 
 // =====================================================
