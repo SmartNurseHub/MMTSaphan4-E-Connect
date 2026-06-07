@@ -59,7 +59,10 @@ app.get("/test-reminder", async (req, res) => {
    - ไม่ block event loop
 ========================= */
 const line = require("@line/bot-sdk");
-
+console.log("=================================");
+console.log("SECRET LENGTH =", process.env.LINE_CHANNEL_SECRET?.length);
+console.log("TOKEN EXISTS =", !!process.env.LINE_CHANNEL_ACCESS_TOKEN);
+console.log("=================================");
 const lineConfig = {
   channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
   channelSecret: process.env.LINE_CHANNEL_SECRET
