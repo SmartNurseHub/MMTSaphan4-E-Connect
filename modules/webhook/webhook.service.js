@@ -4,14 +4,24 @@ const {
   sendLineVaccine
 } = require("../vaccination/vaccination.service");
 
+
 const {
   addLineUID,
-  findLineUser
-} = require("../lineUID/lineUID.service");
+  findLineUser,
+  updateLineUID
+} = require("../lineUID/lineUID.service"); 
 
 const {
   handleRegistrationFlow
 } = require("../lineOA/lineOA.registration.service");
+
+const {
+  addFollowLog
+} = require("../followLog/followLog.service");
+
+const {
+  addUserLog
+} = require("../userLog/userLog.service");
 
 // =====================================================
 // LINE CLIENT
@@ -26,13 +36,30 @@ const lineClient = new Client({
 // =====================================================
 
 async function safeReply(replyToken, msg) {
+
   try {
-    await lineClient.replyMessage(replyToken, msg);
+
+    const messages =
+      Array.isArray(msg) ? msg : [msg];
+
+    await lineClient.replyMessage({
+      replyToken,
+      messages
+    });
+
     return true;
+
   } catch (err) {
-    console.error("❌ REPLY ERROR:", err?.originalError?.response?.data || err);
+
+    console.error(
+      "❌ REPLY ERROR:",
+      err?.originalError?.response?.data || err
+    );
+
     return false;
+
   }
+
 }
 
 // =====================================================
@@ -41,7 +68,13 @@ async function safeReply(replyToken, msg) {
 
 async function safePush(userId, msg) {
   try {
-    await lineClient.pushMessage(userId, msg);
+    const messages =
+  Array.isArray(msg) ? msg : [msg];
+
+await lineClient.pushMessage({
+  to: userId,
+  messages
+});
     return true;
   } catch (err) {
     console.error("❌ PUSH ERROR:", err?.originalError?.response?.data || err);
@@ -75,9 +108,9 @@ async function handleWebhook(body) {
 
           console.log("NEW FOLLOW:", userId);
 
-          const exists = await findLineUser(userId);
+         const exists = await findLineUser(userId);
 
-          if (exists.found) {
+if (exists?.found) {
 
             const ok = await safeReply(event.replyToken, {
               type: "text",
@@ -94,14 +127,22 @@ async function handleWebhook(body) {
             continue;
           }
 
-          const profile = await lineClient.getProfile(userId);
+          let profile = {
+  displayName: "",
+  pictureUrl: ""
+};
 
-          await addLineUID({
-            userId,
-            displayName: profile.displayName || "",
-            pictureUrl: profile.pictureUrl || "",
-            status: "PENDING_CID"
-          });
+try {
+  profile = await lineClient.getProfile(userId);
+} catch (err) {
+  console.error("PROFILE ERROR:", err);
+}
+
+await addFollowLog({
+  userId,
+  displayName: profile.displayName,
+  pictureUrl: profile.pictureUrl
+});
 
           const ok = await safeReply(event.replyToken, {
             type: "text",
@@ -125,7 +166,30 @@ async function handleWebhook(body) {
         if (event.type === "message") {
 
           const userId = event.source?.userId;
-          const text = (event.message?.text || "").trim();
+
+const text =
+  (event.message?.text || "").trim();
+
+let profile = {
+  displayName: "",
+  pictureUrl: ""
+};
+
+try {
+
+  profile = await lineClient.getProfile(userId);
+
+} catch (err) {
+
+  console.error("PROFILE ERROR:", err);
+
+}
+
+await addUserLog({
+  userId,
+  displayName: profile.displayName || "",
+  text
+});
 
           console.log("UID:", userId);
           console.log("TEXT:", text);
@@ -164,48 +228,47 @@ async function handleWebhook(body) {
           // =================================================
           // COMMAND: ลงทะเบียน
           // =================================================
+          if (
+  text === "__REGISTER__" ||
+  text === "ลงทะเบียน"
+) {
 
-          if (text === "ลงทะเบียน") {
+  const exists = await findLineUser(userId);
 
-            const exists = await findLineUser(userId);
+if (exists?.found) {
 
-            if (exists.found) {
+    if (exists.data?.status === "ACTIVE") {
 
-              const status = exists.data?.status || "";
+      await safeReply(event.replyToken, {
+        type: "text",
+        text: "ท่านลงทะเบียนเรียบร้อยแล้ว ✅"
+      });
 
-              if (status === "PENDING_CID") {
-                await safeReply(event.replyToken, {
-                  type: "text",
-                  text: "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
-                });
-                continue;
-              }
+      continue;
+    }
 
-              if (status === "ACTIVE") {
-                await safeReply(event.replyToken, {
-                  type: "text",
-                  text: "ท่านลงทะเบียนเรียบร้อยแล้ว ✅"
-                });
-                continue;
-              }
-            }
+    if (exists.data?.status === "PENDING_CID") {
 
-            const profile = await lineClient.getProfile(userId);
+      await safeReply(event.replyToken, {
+        type: "text",
+        text: "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
+      });
 
-            await addLineUID({
-              userId,
-              displayName: profile.displayName || "",
-              pictureUrl: profile.pictureUrl || "",
-              status: "PENDING_CID"
-            });
+      continue;
+    }
+  }
 
-            await safeReply(event.replyToken, {
-              type: "text",
-              text: "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
-            });
+  const profile =
+    await lineClient.getProfile(userId);
 
-            continue;
-          }
+
+  await safeReply(event.replyToken, {
+    type: "text",
+    text: "กรุณากรอกเลขบัตรประชาชน 13 หลัก"
+  });
+
+  continue;
+}
 
           // =================================================
           // FALLBACK (NO SILENT MODE)

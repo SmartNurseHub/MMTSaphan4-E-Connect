@@ -315,7 +315,10 @@ async function handleUnfollowEvent(event) {
 async function safePush(userId, message, retry = 3) {
   for (let i = 0; i < retry; i++) {
     try {
-      const res = await lineClient.pushMessage(userId, message);
+      const res = client.pushMessage({
+  to: userId,
+  messages
+});
       console.log("📨 LINE PUSH SUCCESS:", res);
       return res;
     } catch (err) {

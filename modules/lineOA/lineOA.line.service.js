@@ -56,7 +56,10 @@ async function safePush(userId, message) {
 
     try {
 
-      await client.pushMessage(userId, messages);
+      await client.pushMessage({
+  to: userId,
+  messages
+});
       return true;
 
     } catch (err2) {

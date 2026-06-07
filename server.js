@@ -13,9 +13,7 @@ const PORT = process.env.PORT || 7000;
 const { runReminderJob } =
   require("./modules/vaccination/vaccination.reminder.service");
 
-const { handleWebhook } =
-  require("./modules/webhook/webhook.service"); // ✅ เพิ่ม
-
+const { handleWebhook } = require("./modules/webhook/webhook.service");
 /* =========================
    MIDDLEWARE
 ========================= */
@@ -37,8 +35,10 @@ app.use("/api", require("./routes"));
 app.use("/api/patient", require("./modules/patients/patients.routes"));
 app.use("/api/vaccination", require("./modules/vaccination/vaccination.routes"));
 app.use("/api/inventory", require("./modules/inventory/inventory.routes"));
-app.use("/lineoa", require("./modules/lineOA/lineOA.routes"));
 app.use("/satisfaction-survey", require("./modules/satisfactionSurvey/satisfactionSurvey.routes"));
+app.use("/lineoa", require("./modules/lineOA/lineOA.routes"));
+app.use("/lineuid", require("./modules/lineUID/lineUID.routes"));
+app.use("/followlist", require("./modules/followList/followList.routes"));
 
 /* =========================
    TEST ROUTE
@@ -58,17 +58,25 @@ app.get("/test-reminder", async (req, res) => {
    - ต้องตอบทันที
    - ไม่ block event loop
 ========================= */
-app.post("/webhook", async (req, res) => {
+const line = require("@line/bot-sdk");
 
-  res.sendStatus(200);
+const lineConfig = {
+  channelAccessToken: process.env.LINE_CHANNEL_ACCESS_TOKEN,
+  channelSecret: process.env.LINE_CHANNEL_SECRET
+};
 
-  try {
-    await handleWebhook(req.body);
-  } catch (err) {
-    console.error(err);
+app.post(
+  "/webhook",
+  line.middleware(lineConfig),
+  async (req, res) => {
+
+    res.sendStatus(200);
+
+    handleWebhook(req.body)
+      .catch(err => console.error("WEBHOOK:", err));
+
   }
-
-});
+);
 
 
 /* =========================
