@@ -68,20 +68,15 @@ const lineConfig = {
   channelSecret: process.env.LINE_CHANNEL_SECRET
 };
 
-app.post(
-  "/webhook",
-  line.middleware(lineConfig),
-  async (req, res) => {
 
-    res.sendStatus(200);
+app.get("/webhook", (req, res) => {
+  res.send("WEBHOOK OK");
+});
 
-    handleWebhook(req.body)
-      .catch(err => console.error("WEBHOOK:", err));
-
-  }
-);
-
-
+app.post("/webhook-test", (req, res) => {
+  console.log("WEBHOOK TEST HIT");
+  res.sendStatus(200);
+});
 /* =========================
    SPA FALLBACK
 ========================= */
